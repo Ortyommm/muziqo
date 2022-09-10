@@ -18,7 +18,7 @@ export class PlaylistEntity {
   @PrimaryColumn({ type: 'varchar', length: 100 })
   name: string;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ type: 'varchar', length: 300, nullable: true })
   description: string;
 
   @ManyToMany(() => SongEntity)
@@ -30,5 +30,6 @@ export class PlaylistEntity {
   img: string;
 
   @ManyToOne(() => UserEntity, (userEntity) => userEntity.playlists)
+  @JoinTable()
   user: UserEntity;
 }

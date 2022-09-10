@@ -24,6 +24,9 @@ export class SongEntity {
   @JoinTable()
   authors: AuthorEntity[];
 
+  @Column('varchar')
+  duration: number;
+
   //img file location
   @Column('varchar', { nullable: true })
   img: string;

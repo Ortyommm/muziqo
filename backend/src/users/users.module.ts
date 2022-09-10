@@ -6,7 +6,6 @@ import { UserEntity } from './entities/user.entity';
 import { RoleEntity } from '../roles/entities/user.entity';
 import { RolesModule } from '../roles/roles.module';
 import { AuthModule } from '../auth/auth.module';
-import { PlaylistEntity } from '../playlists/entities/playlist.entity';
 
 @Module({
   controllers: [UsersController],

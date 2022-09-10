@@ -14,6 +14,7 @@ import { AuthorService } from '../author/author.service';
 import * as fs from 'fs';
 import { writeMulterFile } from './utils/writeFile';
 import { songsDest } from './utils/multer-settings';
+import { parseBuffer } from 'music-metadata';
 
 @Injectable()
 export class SongsService {
@@ -31,6 +32,8 @@ export class SongsService {
   ) {
     if (!file) throw new HttpException('miss_music_file', 400);
 
+    const songMeta = await parseBuffer(file.buffer);
+
     const toCommonPathFormat = (oldPath: string) =>
       oldPath ? '/' + oldPath.replace(/\\/g, '/') : null;
 
@@ -41,6 +44,7 @@ export class SongsService {
     ]);
     song.file = toCommonPathFormat(songFilePath);
     song.img = toCommonPathFormat(imgFilePath);
+    song.duration = songMeta.format.duration;
     song.authors = [];
 
     if (dto.authorId) {

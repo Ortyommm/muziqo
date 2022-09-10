@@ -34,10 +34,18 @@ export class UsersService {
   }
 
   async findUserByEmail(email: string) {
-    const user = await this.users.findOne({
+    const user = await this.users
+      .createQueryBuilder('user')
+      .where({ email })
+      .addSelect('user.password')
+      .loadAllRelationIds({ relations: ['roles'] })
+      .getOne();
+    // console.log({ user });
+    /*.findOne({
       where: { email },
       relations: ['roles'],
-    });
+    })*/
+
     return user;
   }
 
@@ -69,5 +77,13 @@ export class UsersService {
 
     await this.users.remove(user);
     return { message: 'success' };
+  }
+
+  async findUserById(id: number, loadRelations = true) {
+    const user = await this.users.findOne({
+      where: { id },
+      relations: loadRelations ? ['roles', 'playlists'] : undefined,
+    });
+    return user;
   }
 }
