@@ -17,7 +17,6 @@ import { useAppSelector } from "../../store";
 export default function SongItem({
   name,
   authors,
-  img,
   id,
   file,
   duration,

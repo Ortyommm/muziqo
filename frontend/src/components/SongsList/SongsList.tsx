@@ -1,19 +1,13 @@
 import SongItem from "./SongItem";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { api } from "../../utils/api";
 import { ISong } from "./types";
 import { AxiosResponse } from "axios";
 import { Container } from "@mui/material";
-import {
-  pause,
-  play,
-  setAudioControllerSrc,
-  setCurrentSongId,
-  setDuration,
-  setSongs,
-} from "../../store/modules/audio";
+import { pause, play, setSongs } from "../../store/modules/audio";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { changeSong } from "../../store/modules/dispatchSong";
 
 export default function SongsList() {
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
@@ -30,15 +24,9 @@ export default function SongsList() {
 
   if (!songs.length) return <>"LOADING"</>;
 
-  async function onAudio(audioSrc: string, id: number, duration: number) {
+  async function onAudio(file: string, id: number, duration: number) {
     if (id !== currentSongId) {
-      const audioFile = await api.get(audioSrc, { responseType: "blob" });
-      dispatch(
-        setAudioControllerSrc(window.URL.createObjectURL(audioFile.data))
-      );
-      dispatch(setCurrentSongId(id));
-      dispatch(setDuration(+duration));
-      dispatch(play());
+      changeSong({ file, id, duration }, dispatch);
       return;
     }
 
@@ -47,14 +35,6 @@ export default function SongsList() {
     } else {
       dispatch(play());
     }
-
-    // if (!audioObj) {
-    //   const audio = new Audio();
-    //   audio.volume = 0.2;
-    //   setAudioObj(audio);
-    //   play(audio);
-    //   return;
-    // }
   }
 
   return (

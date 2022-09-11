@@ -1,6 +1,13 @@
-import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  Action,
+  createAsyncThunk,
+  createSlice,
+  Dispatch,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { store } from "../index";
 import { ISong } from "../../components/SongsList/types";
+import { api } from "../../utils/api";
 
 const audioController = new Audio();
 audioController.ontimeupdate = (event) =>
@@ -8,8 +15,7 @@ audioController.ontimeupdate = (event) =>
     setCurrentTime((event.target! as HTMLAudioElement).currentTime)
   );
 
-// audioController.onplay = console.log;
-const initialState: {
+export interface IAudioState {
   duration: null | number;
   isPlaying: boolean;
   currentSongId: null | number;
@@ -17,7 +23,9 @@ const initialState: {
   audioSrc: string | null;
   volume: number;
   songs: ISong[];
-} = {
+}
+
+const initialState: IAudioState = {
   isPlaying: false,
   currentSongId: null,
   currentTime: 0,
@@ -26,6 +34,15 @@ const initialState: {
   volume: 1,
   songs: [],
 };
+
+// function setStateFieldsBySong(state: IAudioState, song: ISong) {
+//   state.audioSrc = song.file;
+//   state.currentSongId = song.id;
+//   state.currentTime = 0;
+//   state.duration = +song.duration;
+//   audioController.pause();
+//   fetchFileAndGetUrl(song.file)(store.dispatch);
+// }
 
 const audioSlice = createSlice({
   name: "audio",
@@ -57,7 +74,7 @@ const audioSlice = createSlice({
       audioController.pause();
       state.isPlaying = false;
     },
-    play(state) {
+    play(state: IAudioState) {
       if (!state.currentSongId) return;
       audioController.play();
       state.isPlaying = true;
@@ -71,6 +88,33 @@ const audioSlice = createSlice({
     setSongs(state, action: PayloadAction<ISong[]>) {
       state.songs = action.payload;
     },
+    // next(state) {
+    //   const currentSongIndex = state.songs.findIndex(
+    //     (song) => song.id === state.currentSongId
+    //   );
+    //   if (
+    //     currentSongIndex === state.songs.length - 1 ||
+    //     currentSongIndex === -1
+    //   ) {
+    //     setStateFieldsBySong(state, state.songs[0]);
+    //   } else {
+    //     setStateFieldsBySong(state, state.songs[currentSongIndex + 1]);
+    //   }
+    // },
+    // prev(state) {
+    //   const currentSongIndex = state.songs.findIndex(
+    //     (song) => song.id === state.currentSongId
+    //   );
+    //   if (currentSongIndex === -1) {
+    //     setStateFieldsBySong(state, state.songs[0]);
+    //     return;
+    //   }
+    //   if (currentSongIndex === 0) {
+    //     setStateFieldsBySong(state, state.songs[state.songs.length - 1]);
+    //   } else {
+    //     setStateFieldsBySong(state, state.songs[currentSongIndex - 1]);
+    //   }
+    // },
   },
 });
 
@@ -87,4 +131,18 @@ export const {
   setCurrentTimeBySlider,
   setSongs,
 } = audioSlice.actions;
+
+const rawFetchFileAndGetUrl = async (audioSrc: string) => {
+  const audioFile = await api.get(audioSrc, { responseType: "blob" });
+  return window.URL.createObjectURL(audioFile.data);
+};
+
+export const fetchFileAndGetUrl =
+  (audioSrc: string) => async (dispatch: Dispatch) => {
+    // dispatch(pause());
+    const audioFileSrc = await rawFetchFileAndGetUrl(audioSrc);
+    dispatch(setAudioControllerSrc(audioFileSrc));
+    // dispatch(play());
+  };
+
 export default audioSlice.reducer;
