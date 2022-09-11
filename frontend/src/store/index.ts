@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./modules/auth";
+import userReducer from "./modules/user";
 import audioReducer from "./modules/audio";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    auth: userReducer,
     audio: audioReducer,
   },
 });

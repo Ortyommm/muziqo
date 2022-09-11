@@ -2,6 +2,7 @@ import { Grid, Paper } from "@mui/material";
 import * as React from "react";
 import VolumeControl from "./VolumeControl";
 import PlayControls from "./PlayControls";
+import SongsData from "./SongsData";
 
 export default function Footer() {
   return (
@@ -17,7 +18,7 @@ export default function Footer() {
       }}
     >
       <Grid container alignItems="center">
-        <Grid item xs={3}></Grid>
+        <SongsData />
         <PlayControls />
         <VolumeControl />
       </Grid>
