@@ -4,11 +4,11 @@ import cl from "./AuthPage.module.scss";
 import { textFieldBind } from "../../utils/bind";
 import { isEmail } from "../../utils/validators";
 import { api } from "../../utils/api";
-import { IAuthPayload, IAuthResponseData } from "./types";
 import { AxiosResponse } from "axios";
 import { setToken } from "../../store/modules/user";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { IAuthPayload, IAuthResponseData } from "../../types/AuthTypes";
 
 export default function AuthPage() {
   const [isRegister, setIsRegister] = useState(true);

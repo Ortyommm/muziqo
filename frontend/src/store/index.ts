@@ -1,12 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./modules/user";
 import audioReducer from "./modules/audio";
+import songsReducer from "./modules/songs";
+import usersReducer from "./modules/users";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
     auth: userReducer,
     audio: audioReducer,
+    songs: songsReducer,
+    users: usersReducer,
   },
 });
 

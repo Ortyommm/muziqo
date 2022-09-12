@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -14,6 +15,8 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles-auth.decorator';
 import { AddRoleDto } from './dto/add-role.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
+import { IAuthorizedUserRequest } from '../auth/types';
+import { AddOrDeleteFavoriteDto } from './dto/add-favorite';
 
 @Controller('users')
 export class UsersController {
@@ -26,15 +29,49 @@ export class UsersController {
 
   // @Roles('ADMIN')
   // @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.usersService.findAll();
   }
 
+  @Get('/me')
+  @UseGuards(JwtAuthGuard)
+  findByRequest(@Req() req: IAuthorizedUserRequest) {
+    return this.usersService.findUserById(req.user.id, [
+      'roles',
+      'favorites',
+      'favorites.authors',
+      'playlists',
+    ]);
+  }
+
   @Get('/:id')
+  @UseGuards(JwtAuthGuard)
   findById(@Param('id') id: number) {
-    return this.usersService.findUserById(id, true);
+    return this.usersService.findUserById(id, [
+      'roles',
+      'favorites',
+      'playlists',
+    ]);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/favorite')
+  addFavorite(
+    @Req() req: IAuthorizedUserRequest,
+    @Body() dto: AddOrDeleteFavoriteDto,
+  ) {
+    return this.usersService.addFavorite(req, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/favorite')
+  removeFavorite(
+    @Req() req: IAuthorizedUserRequest,
+    @Body() dto: AddOrDeleteFavoriteDto,
+  ) {
+    return this.usersService.removeFavorite(req, dto);
   }
 
   @Roles('ADMIN')

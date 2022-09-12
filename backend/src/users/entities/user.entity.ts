@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { RoleEntity } from '../../roles/entities/user.entity';
 import { PlaylistEntity } from '../../playlists/entities/playlist.entity';
+import { SongEntity } from '../../songs/entities/song.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -40,6 +41,10 @@ export class UserEntity {
   @OneToMany(() => PlaylistEntity, (playlistEntity) => playlistEntity.user)
   @JoinTable()
   playlists: PlaylistEntity[];
+
+  @ManyToMany(() => SongEntity)
+  @JoinTable()
+  favorites: SongEntity[];
 
   @CreateDateColumn()
   created: Date;

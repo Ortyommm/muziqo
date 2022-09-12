@@ -6,7 +6,8 @@ import {
   setDuration,
 } from "./audio";
 import { AppDispatch } from "../index";
-import { ISong } from "../../components/SongsList/types";
+import { ISong } from "../../types/SongsTypes";
+import { ISongsState } from "./songs";
 
 async function changeSong(
   {
@@ -42,7 +43,11 @@ function getPrevSong(songs: ISong[], currentSongId: number | null) {
   }
 }
 
-export { changeSong, getNextSong, getPrevSong };
+function getAllSongsExceptFavorites(state: ISongsState) {
+  return [...state.search, ...state.discover];
+}
+
+export { changeSong, getNextSong, getPrevSong, getAllSongsExceptFavorites };
 // function prev(state) {
 //     const currentSongIndex = songs.findIndex(
 //         (song) => song.id === state.currentSongId

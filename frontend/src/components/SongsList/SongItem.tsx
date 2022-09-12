@@ -1,18 +1,12 @@
-import {
-  Box,
-  IconButton,
-  ListItem,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, ListItem, Typography } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import PauseIcon from "@mui/icons-material/Pause";
-import { ISong } from "./types";
-import { api } from "../../utils/api";
-import { useState } from "react";
 import { durationConverter } from "../../utils/durationConverter";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { ISong } from "../../types/SongsTypes";
+import { addFavorite, removeFavorite } from "../../store/modules/songs";
 
 export default function SongItem({
   name,
@@ -24,13 +18,22 @@ export default function SongItem({
 }: {
   onAudio: (audioSrc: string, id: number, duration: number) => void;
 } & ISong) {
+  const dispatch = useAppDispatch();
+
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
   const isCurrent = currentSongId === id;
   const isPlaying = useAppSelector((state) => state.audio.isPlaying);
   const currentTime = useAppSelector((state) => state.audio.currentTime);
-
+  const isFavorite = useAppSelector((state) => state.songs.favorites).some(
+    (favSong) => favSong.id === id
+  );
+  // console.log(isFavorite);
   async function onAudioClick() {
     onAudio(file, id, +duration);
+  }
+
+  function onFavoriteClick() {
+    dispatch(isFavorite ? removeFavorite(id) : addFavorite(id));
   }
 
   return (
@@ -52,8 +55,8 @@ export default function SongItem({
             {isCurrent ? `${durationConverter(currentTime)} /` : ""}{" "}
             {durationConverter(+duration)}
           </Typography>
-          <IconButton aria-label="comments">
-            <FavoriteIcon />
+          <IconButton aria-label="comments" onClick={onFavoriteClick}>
+            {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
         </Box>
       }
@@ -71,7 +74,7 @@ export default function SongItem({
         sx={{ color: (theme) => theme.palette.text.secondary, fontSize: 11 }}
       >
         {/*TODO many authors*/}
-        {authors[0]?.name}
+        {authors?.[0]?.name}
       </Typography>
     </ListItem>
   );

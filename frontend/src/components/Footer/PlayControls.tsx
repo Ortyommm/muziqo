@@ -15,7 +15,8 @@ import {
 export default function PlayControls() {
   const dispatch = useAppDispatch();
 
-  const songs = useAppSelector((state) => state.audio.songs);
+  //TODO dynamic changing songs sources
+  const songs = useAppSelector((state) => state.songs.favorites);
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
 
   const currentTime = useAppSelector((state) => state.audio.currentTime);

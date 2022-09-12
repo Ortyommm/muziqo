@@ -6,6 +6,7 @@ import {
   Get,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseGuards,
@@ -49,8 +50,8 @@ export class SongsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.songsService.findAll();
+  findAll(@Query('name') name?: string) {
+    return this.songsService.findAll(name);
   }
 
   @Delete()

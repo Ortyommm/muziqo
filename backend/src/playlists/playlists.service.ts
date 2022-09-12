@@ -16,7 +16,7 @@ export class PlaylistsService {
 
   async create(req: IAuthorizedUserRequest, dto: CreatePlaylistDto) {
     const playlist = Object.assign(new PlaylistEntity(), dto);
-    const user = await this.userService.findUserById(req.user.id, false);
+    const user = await this.userService.findUserById(req.user.id, null);
     playlist.user = user;
     return this.playlists.save(playlist);
 

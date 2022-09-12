@@ -63,8 +63,17 @@ export class SongsService {
     }
   }
 
-  findAll() {
-    return this.songs.find({ relations: ['authors'] });
+  findAll(name?: string) {
+    if (!name)
+      return this.songs.find({
+        relations: ['authors'],
+      });
+
+    return this.songs
+      .createQueryBuilder()
+      .select()
+      .where(`name ILIKE :name`, { name: `%${name}%` })
+      .getMany();
   }
 
   async deleteSong(dto: DeleteSongDto) {

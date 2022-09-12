@@ -26,6 +26,7 @@ export class AuthService {
 
   private async validateUser(userDto: CreateUserDto) {
     const user = await this.userService.findUserByEmail(userDto.email);
+    //if !user
     const passwordEquals = await scryptVerify(userDto.password, user.password);
     if (user && passwordEquals) {
       return user;

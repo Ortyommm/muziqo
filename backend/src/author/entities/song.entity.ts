@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   OneToMany,
@@ -14,6 +15,7 @@ export class AuthorEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index({ fulltext: true })
   @PrimaryColumn({ type: 'varchar', length: 100 })
   name: string;
 

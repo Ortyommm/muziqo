@@ -6,8 +6,8 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { store } from "../index";
-import { ISong } from "../../components/SongsList/types";
 import { api } from "../../utils/api";
+import { ISong } from "../../types/SongsTypes";
 
 const audioController = new Audio();
 audioController.ontimeupdate = (event) =>
@@ -22,7 +22,6 @@ export interface IAudioState {
   currentTime: number;
   audioSrc: string | null;
   volume: number;
-  songs: ISong[];
 }
 
 const initialState: IAudioState = {
@@ -32,7 +31,6 @@ const initialState: IAudioState = {
   duration: null,
   audioSrc: null,
   volume: 1,
-  songs: [],
 };
 
 // function setStateFieldsBySong(state: IAudioState, song: ISong) {
@@ -85,9 +83,7 @@ const audioSlice = createSlice({
       state.isPlaying = !state.isPlaying;
     },
     //Songs reducer
-    setSongs(state, action: PayloadAction<ISong[]>) {
-      state.songs = action.payload;
-    },
+
     // next(state) {
     //   const currentSongIndex = state.songs.findIndex(
     //     (song) => song.id === state.currentSongId
@@ -129,7 +125,6 @@ export const {
   toggle,
   setDuration,
   setCurrentTimeBySlider,
-  setSongs,
 } = audioSlice.actions;
 
 const rawFetchFileAndGetUrl = async (audioSrc: string) => {

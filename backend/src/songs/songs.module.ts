@@ -21,7 +21,7 @@ fs.mkdirSync(songsDest, { recursive: true });
   imports: [
     TypeOrmModule.forFeature([SongEntity]),
     MulterModule.register(getMulterSettings()),
-    AuthModule,
+    forwardRef(() => AuthModule),
     forwardRef(() => AuthorModule),
   ],
   exports: [SongsService],

@@ -19,11 +19,11 @@ class AppHeaderPage {
 export default function AppHeader() {
   const pages = [
     new AppHeaderPage("Home", <HomeIcon />, ""),
-    new AppHeaderPage(
-      "Favourites",
-      <FavoriteIcon fontSize="small" />,
-      "favorites"
-    ),
+    // new AppHeaderPage(
+    //   "Favourites",
+    //   <FavoriteIcon fontSize="small" />,
+    //   "favorites"
+    // ),
     new AppHeaderPage("Playlists", <QueueMusicIcon />, "playlists"),
     new AppHeaderPage("Discover", <BoltIcon />, "discover"),
   ];
@@ -61,6 +61,7 @@ export default function AppHeader() {
                 >
                   <Button
                     variant="text"
+                    color="primary"
                     sx={{
                       mr: 3,
                       color: "white",

@@ -1,9 +1,12 @@
 import { Grid } from "@mui/material";
 import * as React from "react";
 import { useAppSelector } from "../../store";
+import { getAllSongsExceptFavorites } from "../../store/modules/dispatchSong";
 
 export default function SongsData() {
-  const songs = useAppSelector((state) => state.audio.songs);
+  const songs = useAppSelector((state) =>
+    getAllSongsExceptFavorites(state.songs)
+  );
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
 
   const currentSong = songs.find((song) => song.id === currentSongId);
@@ -19,7 +22,7 @@ export default function SongsData() {
           item
           sx={{ color: (theme) => theme.palette.grey.A700, fontSize: 12 }}
         >
-          {currentSong.authors[0].name}
+          {currentSong.authors?.[0]?.name}
         </Grid>
       </Grid>
     </Grid>
