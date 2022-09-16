@@ -6,14 +6,12 @@ import { api } from "../../utils/api";
 export interface ISongsState {
   discover: ISong[];
   favorites: ISong[];
-  isFavoritesLoading: boolean;
   search: ISong[];
 }
 
 const initialState: ISongsState = {
   discover: [],
   favorites: [],
-  isFavoritesLoading: false,
   search: [],
 };
 
@@ -23,9 +21,6 @@ const songsSlice = createSlice({
   reducers: {
     setFavorites(state, action: PayloadAction<ISong[]>) {
       state.favorites = action.payload;
-    },
-    setIsFavoritesLoading(state, action: PayloadAction<boolean>) {
-      state.isFavoritesLoading = action.payload;
     },
     setDiscoverSongs(state, action: PayloadAction<ISong[]>) {
       state.discover = action.payload;
@@ -58,11 +53,7 @@ export const removeFavorite =
     }
   };
 
-export const {
-  setFavorites,
-  setIsFavoritesLoading,
-  setDiscoverSongs,
-  setSearchSongs,
-} = songsSlice.actions;
+export const { setFavorites, setDiscoverSongs, setSearchSongs } =
+  songsSlice.actions;
 
 export default songsSlice.reducer;

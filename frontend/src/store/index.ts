@@ -3,6 +3,7 @@ import userReducer from "./modules/user";
 import audioReducer from "./modules/audio";
 import songsReducer from "./modules/songs";
 import usersReducer from "./modules/users";
+import playlistsReducer from "./modules/playlists";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     auth: userReducer,
     audio: audioReducer,
     songs: songsReducer,
+    playlists: playlistsReducer,
     users: usersReducer,
   },
 });

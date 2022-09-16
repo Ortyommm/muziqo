@@ -1,4 +1,5 @@
 import { ISong } from "./SongsTypes";
+import { IPlaylist } from "./PlaylistsTypes";
 
 export interface IUser {
   id: number;
@@ -8,4 +9,5 @@ export interface IUser {
   // TODO roles
   favorites: ISong[];
   // TODO playlists
+  playlists: IPlaylist[];
 }

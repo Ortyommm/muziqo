@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/AppRouter/ProtectedRoute";
 import Playlists from "./components/Playlists/Playlists";
 import Discover from "./components/Discover/Discover";
 import Home from "./components/Home/Home";
+import PlaylistPage from "./components/Playlists/PlaylistPage";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -44,6 +45,22 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Playlists />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/playlists"
+          element={
+            <ProtectedRoute>
+              <Playlists />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/playlists/:id"
+          element={
+            <ProtectedRoute>
+              <PlaylistPage />
             </ProtectedRoute>
           }
         />

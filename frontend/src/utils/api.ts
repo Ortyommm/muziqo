@@ -1,4 +1,6 @@
 import axios from "axios";
+import { store } from "../store";
+import { setToken } from "../store/modules/user";
 
 export const api = axios.create({
   baseURL: "http://127.0.0.1:5000",
@@ -8,6 +10,14 @@ api.interceptors.request.use((config) => {
   config.headers!.Authorization = `Bearer ${localStorage.getItem("token")}`;
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) store.dispatch(setToken(""));
+    return error;
+  }
+);
 
 // function fetchAudioFile(src: string) {
 //   // go get the file

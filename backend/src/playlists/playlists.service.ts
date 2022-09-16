@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlaylistEntity } from './entities/playlist.entity';
 import { Repository } from 'typeorm';
 import { IAuthorizedUserRequest } from '../auth/types';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UsersService } from '../users/users.service';
+import { AddSongToPlaylistDto } from './dto/add-song-to-playlist.dto';
+import { SongsService } from '../songs/songs.service';
 
 @Injectable()
 export class PlaylistsService {
@@ -12,6 +14,7 @@ export class PlaylistsService {
     @InjectRepository(PlaylistEntity)
     private readonly playlists: Repository<PlaylistEntity>,
     private readonly userService: UsersService,
+    private readonly songsService: SongsService,
   ) {}
 
   async create(req: IAuthorizedUserRequest, dto: CreatePlaylistDto) {
@@ -42,4 +45,24 @@ export class PlaylistsService {
   }
 
   //Реализовать добавление, удаление и поиск плейлистов
+  findById(id: number) {
+    return this.playlists.findOne({
+      where: { id },
+      relations: ['user', 'songs'],
+    });
+  }
+
+  async addSongToPlaylist(
+    req: IAuthorizedUserRequest,
+    dto: AddSongToPlaylistDto,
+  ) {
+    const playlist = await this.findById(dto.playlistId);
+    if (playlist.user.id !== req.user.id)
+      throw new HttpException('forbidden', 403);
+
+    const song = await this.songsService.findById(true, dto.songId);
+    playlist.songs.push(song);
+    console.log({ song });
+    return this.playlists.save(playlist);
+  }
 }

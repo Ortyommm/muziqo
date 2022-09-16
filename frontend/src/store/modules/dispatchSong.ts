@@ -47,7 +47,17 @@ function getAllSongsExceptFavorites(state: ISongsState) {
   return [...state.search, ...state.discover];
 }
 
-export { changeSong, getNextSong, getPrevSong, getAllSongsExceptFavorites };
+function getAllSongs(state: ISongsState) {
+  return [...getAllSongsExceptFavorites(state), ...state.favorites];
+}
+
+export {
+  changeSong,
+  getNextSong,
+  getPrevSong,
+  getAllSongsExceptFavorites,
+  getAllSongs,
+};
 // function prev(state) {
 //     const currentSongIndex = songs.findIndex(
 //         (song) => song.id === state.currentSongId

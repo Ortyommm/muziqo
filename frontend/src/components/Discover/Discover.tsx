@@ -18,6 +18,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { setSearchUsers } from "../../store/modules/users";
 import { IUser } from "../../types/UserTypes";
+import UsersList from "../UsersList/UsersList";
 
 const Discover = () => {
   const discoverSongs = useAppSelector((state) => state.songs.discover);
@@ -110,7 +111,9 @@ const Discover = () => {
           songs={searchText ? searchSongs : discoverSongs}
           isFetching={isLoading}
         />
-      ) : null}
+      ) : (
+        <UsersList users={searchUsers} />
+      )}
     </Container>
   );
 };

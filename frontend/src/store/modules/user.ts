@@ -2,12 +2,13 @@ import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../../utils/api";
 import { RootState } from "../index";
 import { AxiosResponse } from "axios";
-import { ISong } from "../../types/SongsTypes";
 import { IUser } from "../../types/UserTypes";
-import { setFavorites, setIsFavoritesLoading } from "./songs";
+import { setFavorites } from "./songs";
+import { setUserPlaylists } from "./playlists";
 
-const initialState: { token: string | null } = {
+const initialState: { token: string | null; isUserDataLoading: boolean } = {
   token: localStorage.getItem("token"),
+  isUserDataLoading: false,
 };
 
 const userSlice = createSlice({
@@ -18,24 +19,25 @@ const userSlice = createSlice({
       state.token = action.payload;
       localStorage.setItem("token", state.token || "");
     },
+    setIsUserDataLoading(state, action: PayloadAction<boolean>) {
+      state.isUserDataLoading = action.payload;
+    },
   },
 });
 
 export const getUserData =
   () => async (dispatch: Dispatch, getState: () => RootState) => {
-    dispatch(setIsFavoritesLoading(true));
+    dispatch(setIsUserDataLoading(true));
     api
       .get("users/me")
       .then((res: AxiosResponse<IUser>) => {
         dispatch(setFavorites(res.data.favorites));
-      })
-      .catch((err) => {
-        if (err.status === 401) dispatch(setToken(""));
+        dispatch(setUserPlaylists(res.data.playlists));
       })
       .finally(() => {
-        dispatch(setIsFavoritesLoading(false));
+        dispatch(setIsUserDataLoading(false));
       });
   };
 
-export const { setToken } = userSlice.actions;
+export const { setToken, setIsUserDataLoading } = userSlice.actions;
 export default userSlice.reducer;

@@ -5,7 +5,7 @@ import { Container } from "@mui/material";
 
 export default function Home() {
   const songs = useAppSelector((state) => state.songs.favorites);
-  const isLoading = useAppSelector((state) => state.songs.isFavoritesLoading);
+  const isLoading = useAppSelector((state) => state.auth.isUserDataLoading);
 
   return (
     <Container>
