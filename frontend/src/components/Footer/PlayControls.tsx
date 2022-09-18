@@ -3,21 +3,37 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import RepeatIcon from "@mui/icons-material/Repeat";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+
 import * as React from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { setCurrentTimeBySlider, toggle } from "../../store/modules/audio";
+import {
+  setCurrentTimeBySlider,
+  toggle,
+  toggleRepeat,
+  toggleShuffle,
+} from "../../store/modules/audio";
 import {
   changeSong,
   getNextSong,
   getPrevSong,
 } from "../../store/modules/dispatchSong";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 export default function PlayControls() {
   const dispatch = useAppDispatch();
 
-  //TODO dynamic changing songs sources
-  const songs = useAppSelector((state) => state.songs.favorites);
+  const currentSongsSource = useAppSelector(
+    (state) => state.songs.currentSongsSource
+  );
+
+  const songs = useAppSelector((state) => state.songs[currentSongsSource]);
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
+
+  const shuffle = useAppSelector((state) => state.audio.shuffle);
+  const repeat = useAppSelector((state) => state.audio.repeat);
 
   const currentTime = useAppSelector((state) => state.audio.currentTime);
   const duration = useAppSelector((state) => state.audio.duration);
@@ -36,16 +52,42 @@ export default function PlayControls() {
   }
 
   function onPrevClick() {
-    changeSong(getPrevSong(songs, currentSongId), dispatch);
+    changeSong(
+      { ...getPrevSong(songs, currentSongId), changeSource: false },
+      dispatch
+    );
   }
 
   function onNextClick() {
-    changeSong(getNextSong(songs, currentSongId), dispatch);
+    changeSong(
+      { ...getNextSong(songs, currentSongId), changeSource: false },
+      dispatch
+    );
+  }
+
+  function onRepeat() {
+    dispatch(toggleRepeat());
+  }
+
+  function onShuffle() {
+    dispatch(toggleShuffle());
   }
 
   return (
     <Grid xs={6} container item alignItems="center">
-      <Grid item xs={9}>
+      <Grid container item xs={1.5}>
+        <Grid item xs={6}>
+          <IconButton onClick={onRepeat}>
+            <RepeatIcon color={repeat ? "primary" : undefined} />
+          </IconButton>
+        </Grid>
+        <Grid item xs={6}>
+          <IconButton onClick={onShuffle}>
+            <ShuffleIcon color={shuffle ? "primary" : undefined} />
+          </IconButton>
+        </Grid>
+      </Grid>
+      <Grid item xs={7.5}>
         <Slider
           value={currentTimePercent}
           onChange={onCurrentTimeChange}

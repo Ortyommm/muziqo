@@ -14,7 +14,7 @@ export default function AppList({
   if (isFetching) {
     return <CircleCenterProgress />;
   }
-  if (!items.length) return <>No songs</>;
+  if (!items.length) return <>No items</>;
 
   return (
     <>

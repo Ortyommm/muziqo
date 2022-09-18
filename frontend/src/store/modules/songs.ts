@@ -8,12 +8,16 @@ export interface ISongsState {
   discover: ISong[];
   favorites: ISong[];
   search: ISong[];
+  currentSongsSource: SongsSources;
 }
+
+export type SongsSources = "discover" | "favorites" | "search";
 
 const initialState: ISongsState = {
   discover: [],
   favorites: [],
   search: [],
+  currentSongsSource: "favorites",
 };
 
 const songsSlice = createSlice({
@@ -28,6 +32,9 @@ const songsSlice = createSlice({
     },
     setSearchSongs(state, action: PayloadAction<ISong[]>) {
       state.search = action.payload;
+    },
+    setCurrentSongsSource(state, action: PayloadAction<SongsSources>) {
+      state.currentSongsSource = action.payload;
     },
   },
 });
@@ -64,7 +71,11 @@ export const addSongToDiscover =
     });
   };
 
-export const { setFavorites, setDiscoverSongs, setSearchSongs } =
-  songsSlice.actions;
+export const {
+  setFavorites,
+  setDiscoverSongs,
+  setSearchSongs,
+  setCurrentSongsSource,
+} = songsSlice.actions;
 
 export default songsSlice.reducer;

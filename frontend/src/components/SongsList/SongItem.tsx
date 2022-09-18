@@ -21,6 +21,7 @@ import { changeSong } from "../../store/modules/dispatchSong";
 import { pause, play } from "../../store/modules/audio";
 import PlaylistsDialog from "../PlaylistsDialog/PlaylistsDialog";
 import React, { ReactElement, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function SongItem({
   name,

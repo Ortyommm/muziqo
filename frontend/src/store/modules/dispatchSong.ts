@@ -7,7 +7,12 @@ import {
 } from "./audio";
 import { AppDispatch } from "../index";
 import { ISong } from "../../types/SongsTypes";
-import { ISongsState } from "./songs";
+import { ISongsState, setCurrentSongsSource } from "./songs";
+
+function getCurrentSongsByLocation() {
+  if (window.location.pathname === "/discover") return "discover";
+  return "favorites";
+}
 
 async function changeSong(
   {
@@ -15,13 +20,21 @@ async function changeSong(
     file,
     id,
     duration,
-  }: { file: string; id: number; duration: string | number },
+    changeSource = true,
+  }: {
+    file: string;
+    id: number;
+    duration: string | number;
+    changeSource?: boolean;
+  },
   dispatch: AppDispatch
 ) {
   dispatch(pause());
   await dispatch(fetchFileAndGetUrl(file));
   dispatch(setCurrentSongId(id));
   dispatch(setDuration(+duration));
+  if (changeSource)
+    dispatch(setCurrentSongsSource(getCurrentSongsByLocation()));
   dispatch(play());
 }
 

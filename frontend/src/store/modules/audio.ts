@@ -8,12 +8,33 @@ import {
 import { store } from "../index";
 import { api } from "../../utils/api";
 import { ISong } from "../../types/SongsTypes";
+import { changeSong, getNextSong } from "./dispatchSong";
 
 const audioController = new Audio();
 audioController.ontimeupdate = (event) =>
   store.dispatch(
     setCurrentTime((event.target! as HTMLAudioElement).currentTime)
   );
+
+audioController.onended = (event) => {
+  const state = store.getState();
+  if (state.audio.repeat) {
+    store.dispatch(setCurrentTime(0));
+    store.dispatch(play());
+    return;
+  }
+
+  // if(state.audio.shuffle) {
+  //
+  //   return
+  // }
+
+  const nextSong = getNextSong(
+    state.songs[state.songs.currentSongsSource],
+    state.audio.currentSongId
+  );
+  changeSong(nextSong, store.dispatch);
+};
 
 export interface IAudioState {
   duration: null | number;
@@ -22,6 +43,8 @@ export interface IAudioState {
   currentTime: number;
   audioSrc: string | null;
   volume: number;
+  shuffle: boolean;
+  repeat: boolean;
 }
 
 const initialState: IAudioState = {
@@ -31,6 +54,8 @@ const initialState: IAudioState = {
   duration: null,
   audioSrc: null,
   volume: 1,
+  shuffle: false,
+  repeat: false,
 };
 
 // function setStateFieldsBySong(state: IAudioState, song: ISong) {
@@ -82,6 +107,12 @@ const audioSlice = createSlice({
       state.isPlaying ? audioController.pause() : audioController.play();
       state.isPlaying = !state.isPlaying;
     },
+    toggleShuffle(state) {
+      state.shuffle = !state.shuffle;
+    },
+    toggleRepeat(state) {
+      state.repeat = !state.repeat;
+    },
     //Songs reducer
 
     // next(state) {
@@ -125,6 +156,8 @@ export const {
   toggle,
   setDuration,
   setCurrentTimeBySlider,
+  toggleShuffle,
+  toggleRepeat,
 } = audioSlice.actions;
 
 const rawFetchFileAndGetUrl = async (audioSrc: string) => {
