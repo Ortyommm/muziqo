@@ -80,7 +80,7 @@ const Discover = () => {
         <Grid container>
           <Grid item xs={2}>
             <FormControl sx={{ width: "80%" }}>
-              <InputLabel id="demo-simple-select-label">Search for</InputLabel>
+              <InputLabel id="select-label">Search for</InputLabel>
               <Select
                 labelId="select-label"
                 label="Search for"
