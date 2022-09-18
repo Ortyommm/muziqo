@@ -19,8 +19,6 @@ import {
   getNextSong,
   getPrevSong,
 } from "../../store/modules/dispatchSong";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
 
 export default function PlayControls() {
   const dispatch = useAppDispatch();

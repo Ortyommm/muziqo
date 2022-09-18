@@ -5,9 +5,9 @@ import {
   setCurrentSongId,
   setDuration,
 } from "./audio";
-import { AppDispatch } from "../index";
+import { AppDispatch, store } from "../index";
 import { ISong } from "../../types/SongsTypes";
-import { ISongsState, setCurrentSongsSource } from "./songs";
+import { ISongsState, setCurrentSongsSource, setShuffledSongs } from "./songs";
 
 function getCurrentSongsByLocation() {
   if (window.location.pathname === "/discover") return "discover";
@@ -39,6 +39,11 @@ async function changeSong(
 }
 
 function getNextSong(songs: ISong[], currentSongId: number | null) {
+  if (store.getState().audio.shuffle) {
+    const song = getNextSongInShuffled(false);
+    if (song) return song;
+  }
+
   const currentSongIndex = songs.findIndex((song) => song.id === currentSongId);
   if (currentSongIndex === songs.length - 1 || currentSongIndex === -1) {
     return songs[0];
@@ -48,12 +53,48 @@ function getNextSong(songs: ISong[], currentSongId: number | null) {
 }
 
 function getPrevSong(songs: ISong[], currentSongId: number | null) {
+  if (store.getState().audio.shuffle) {
+    const song = getPrevSongInShuffled(false);
+    if (song) return song;
+  }
+
   const currentSongIndex = songs.findIndex((song) => song.id === currentSongId);
   if (currentSongIndex === 0 || currentSongIndex === -1) {
     return songs[songs.length - 1];
   } else {
     return songs[currentSongIndex - 1];
   }
+}
+
+function getPrevSongInShuffled(shouldPlay: boolean) {
+  const state = store.getState();
+  const prevSong = state.songs.shuffled[state.songs.shuffled.length - 2];
+  const currentSong = state.songs.shuffled[state.songs.shuffled.length - 1];
+  if (prevSong) {
+    if (shouldPlay) changeSong(prevSong, store.dispatch);
+    store.dispatch(
+      setShuffledSongs([
+        currentSong,
+        ...state.songs.shuffled.slice(0, -2),
+        prevSong,
+      ])
+    );
+    return prevSong;
+  }
+}
+
+function getNextSongInShuffled(shouldPlay: boolean) {
+  const state = store.getState();
+  const song = state.songs.shuffled[0];
+  if (song) {
+    if (shouldPlay) changeSong(song, store.dispatch);
+    store.dispatch(setShuffledSongs([...state.songs.shuffled.slice(1), song]));
+    return song;
+  }
+}
+
+function playNextSongInShuffled() {
+  getNextSongInShuffled(true);
 }
 
 function getAllSongsExceptFavorites(state: ISongsState) {
@@ -68,6 +109,7 @@ export {
   changeSong,
   getNextSong,
   getPrevSong,
+  playNextSongInShuffled,
   getAllSongsExceptFavorites,
   getAllSongs,
 };

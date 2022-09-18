@@ -3,12 +3,15 @@ import { ISong } from "../../types/SongsTypes";
 import { AppDispatch, RootState } from "../index";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";
+import { shuffle } from "lodash-es";
 
 export interface ISongsState {
   discover: ISong[];
   favorites: ISong[];
   search: ISong[];
   currentSongsSource: SongsSources;
+  //special
+  shuffled: ISong[];
 }
 
 export type SongsSources = "discover" | "favorites" | "search";
@@ -18,6 +21,7 @@ const initialState: ISongsState = {
   favorites: [],
   search: [],
   currentSongsSource: "favorites",
+  shuffled: [],
 };
 
 const songsSlice = createSlice({
@@ -33,11 +37,33 @@ const songsSlice = createSlice({
     setSearchSongs(state, action: PayloadAction<ISong[]>) {
       state.search = action.payload;
     },
-    setCurrentSongsSource(state, action: PayloadAction<SongsSources>) {
+    _setCurrentSongsSource(state, action: PayloadAction<SongsSources>) {
+      // if (state.currentSongsSource !== action.payload) {
       state.currentSongsSource = action.payload;
+      // }
+    },
+    setShuffledSongs(state, action: PayloadAction<ISong[]>) {
+      state.shuffled = action.payload;
     },
   },
 });
+
+export const setCurrentSongsSource =
+  (source: SongsSources) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(songsSlice.actions._setCurrentSongsSource(source));
+    const state = getState();
+    const currentSongId = state.audio.currentSongId;
+
+    const songsWithoutCurrent = state.songs[
+      state.songs.currentSongsSource
+    ].filter((song) => song.id !== currentSongId);
+    const currentSong = state.songs[state.songs.currentSongsSource].find(
+      (song) => song.id === currentSongId
+    );
+
+    dispatch(setShuffledSongs([...shuffle(songsWithoutCurrent), currentSong!]));
+  };
 
 export const addFavorite =
   (songId: number) =>
@@ -75,7 +101,7 @@ export const {
   setFavorites,
   setDiscoverSongs,
   setSearchSongs,
-  setCurrentSongsSource,
+  setShuffledSongs,
 } = songsSlice.actions;
 
 export default songsSlice.reducer;

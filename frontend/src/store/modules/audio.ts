@@ -5,10 +5,16 @@ import {
   Dispatch,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { store } from "../index";
+import { AppDispatch, RootState, store } from "../index";
 import { api } from "../../utils/api";
 import { ISong } from "../../types/SongsTypes";
-import { changeSong, getNextSong } from "./dispatchSong";
+import {
+  changeSong,
+  getNextSong,
+  playNextSongInShuffled,
+} from "./dispatchSong";
+import { shuffle } from "lodash-es";
+import { setShuffledSongs } from "./songs";
 
 const audioController = new Audio();
 audioController.ontimeupdate = (event) =>
@@ -24,10 +30,10 @@ audioController.onended = (event) => {
     return;
   }
 
-  // if(state.audio.shuffle) {
-  //
-  //   return
-  // }
+  if (state.audio.shuffle) {
+    playNextSongInShuffled();
+    return;
+  }
 
   const nextSong = getNextSong(
     state.songs[state.songs.currentSongsSource],
@@ -107,7 +113,7 @@ const audioSlice = createSlice({
       state.isPlaying ? audioController.pause() : audioController.play();
       state.isPlaying = !state.isPlaying;
     },
-    toggleShuffle(state) {
+    _toggleShuffle(state) {
       state.shuffle = !state.shuffle;
     },
     toggleRepeat(state) {
@@ -156,7 +162,6 @@ export const {
   toggle,
   setDuration,
   setCurrentTimeBySlider,
-  toggleShuffle,
   toggleRepeat,
 } = audioSlice.actions;
 
@@ -165,8 +170,19 @@ const rawFetchFileAndGetUrl = async (audioSrc: string) => {
   return window.URL.createObjectURL(audioFile.data);
 };
 
+export const toggleShuffle =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(audioSlice.actions._toggleShuffle());
+
+    dispatch(
+      setShuffledSongs(
+        shuffle(getState().songs[getState().songs.currentSongsSource])
+      )
+    );
+  };
+
 export const fetchFileAndGetUrl =
-  (audioSrc: string) => async (dispatch: Dispatch) => {
+  (audioSrc: string) => async (dispatch: AppDispatch) => {
     // dispatch(pause());
     const audioFileSrc = await rawFetchFileAndGetUrl(audioSrc);
     dispatch(setAudioControllerSrc(audioFileSrc));
