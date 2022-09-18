@@ -1,7 +1,7 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { FormEvent, useState } from "react";
 import cl from "./AuthPage.module.scss";
-import { textFieldBind } from "../../utils/bind";
+import { textFieldBind } from "../../utils/input";
 import { isEmail } from "../../utils/validators";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";

@@ -7,6 +7,7 @@ import { ISong } from "../../types/SongsTypes";
 import { setDiscoverSongs, setSearchSongs } from "../../store/modules/songs";
 import {
   Container,
+  Fab,
   FormControl,
   Grid,
   InputAdornment,
@@ -16,9 +17,11 @@ import {
   TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
 import { setSearchUsers } from "../../store/modules/users";
 import { IUser } from "../../types/UserTypes";
 import UsersList from "../UsersList/UsersList";
+import AddSongOrAuthor from "./AddSongOrAuthor";
 
 const Discover = () => {
   const discoverSongs = useAppSelector((state) => state.songs.discover);
@@ -72,49 +75,52 @@ const Discover = () => {
   }, [searchItem]);
 
   return (
-    <Container>
-      <Grid container>
-        <Grid item xs={2}>
-          <FormControl sx={{ width: "80%" }}>
-            <InputLabel id="demo-simple-select-label">Search for</InputLabel>
-            <Select
-              labelId="select-label"
-              label="Search for"
-              value={searchItem}
-              onChange={(event) =>
-                setSearchItem(event.target.value as SearchItems)
-              }
-            >
-              <MenuItem value="songs">Songs</MenuItem>
-              <MenuItem value="users">Users</MenuItem>
-            </Select>
-          </FormControl>
+    <>
+      <Container>
+        <Grid container>
+          <Grid item xs={2}>
+            <FormControl sx={{ width: "80%" }}>
+              <InputLabel id="demo-simple-select-label">Search for</InputLabel>
+              <Select
+                labelId="select-label"
+                label="Search for"
+                value={searchItem}
+                onChange={(event) =>
+                  setSearchItem(event.target.value as SearchItems)
+                }
+              >
+                <MenuItem value="songs">Songs</MenuItem>
+                <MenuItem value="users">Users</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={10}>
+            <TextField
+              value={searchText}
+              onChange={onSearch}
+              fullWidth
+              sx={{ mb: 2 }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={10}>
-          <TextField
-            value={searchText}
-            onChange={onSearch}
-            fullWidth
-            sx={{ mb: 2 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+        {searchItem === "songs" ? (
+          <SongsList
+            songs={searchText ? searchSongs : discoverSongs}
+            isFetching={isLoading}
           />
-        </Grid>
-      </Grid>
-      {searchItem === "songs" ? (
-        <SongsList
-          songs={searchText ? searchSongs : discoverSongs}
-          isFetching={isLoading}
-        />
-      ) : (
-        <UsersList users={searchUsers} />
-      )}
-    </Container>
+        ) : (
+          <UsersList users={searchUsers} />
+        )}
+      </Container>
+      <AddSongOrAuthor />
+    </>
   );
 };
 

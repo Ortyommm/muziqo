@@ -1,9 +1,10 @@
-import { IsNumber, IsNumberString, IsString } from 'class-validator';
+import { IsNumberString, IsOptional, IsString } from 'class-validator';
 
 export class CreateSongDto {
   @IsString()
   name: string;
 
+  @IsOptional()
   @IsNumberString()
   authorId: number;
 }

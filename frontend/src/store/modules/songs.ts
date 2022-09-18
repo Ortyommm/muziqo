@@ -1,7 +1,8 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { ISong } from "../../types/SongsTypes";
-import { RootState } from "../index";
+import { AppDispatch, RootState } from "../index";
 import { api } from "../../utils/api";
+import { AxiosResponse } from "axios";
 
 export interface ISongsState {
   discover: ISong[];
@@ -32,7 +33,8 @@ const songsSlice = createSlice({
 });
 
 export const addFavorite =
-  (songId: number) => async (dispatch: Dispatch, getState: () => RootState) => {
+  (songId: number) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const song = getState().songs.discover.find((song) => song.id === songId);
     if (song) {
       api.post("users/favorite", { songId });
@@ -41,7 +43,8 @@ export const addFavorite =
   };
 
 export const removeFavorite =
-  (songId: number) => async (dispatch: Dispatch, getState: () => RootState) => {
+  (songId: number) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const song = getState().songs.discover.find((song) => song.id === songId);
     if (song) {
       api.delete("users/favorite", { data: { songId } });
@@ -51,6 +54,14 @@ export const removeFavorite =
         )
       );
     }
+  };
+
+export const addSongToDiscover =
+  (data: FormData) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    api.post("songs/upload", data).then((res: AxiosResponse<ISong>) => {
+      dispatch(setDiscoverSongs([...getState().songs.discover, res.data]));
+    });
   };
 
 export const { setFavorites, setDiscoverSongs, setSearchSongs } =

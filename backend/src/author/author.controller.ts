@@ -7,8 +7,11 @@ export class AuthorController {
   constructor(private authorService: AuthorService) {}
 
   @Get()
-  findAll(@Query('fetch_songs') fetchSongs: string) {
-    return this.authorService.findAll(fetchSongs);
+  findAll(
+    @Query('fetch_songs') fetchSongs: string,
+    @Query('name') name?: string,
+  ) {
+    return this.authorService.findAll(fetchSongs, name);
   }
 
   @Post()

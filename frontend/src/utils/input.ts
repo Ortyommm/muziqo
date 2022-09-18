@@ -12,3 +12,7 @@ export const textFieldBind = (
     },
   };
 };
+
+export const getFileNameFromInput = (value: string) => {
+  return value.split(/(\\|\/)/g).pop();
+};

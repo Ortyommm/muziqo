@@ -31,9 +31,12 @@ export class SongsService {
     img?: Express.Multer.File,
   ) {
     if (!file) throw new HttpException('miss_music_file', 400);
+    if (file.mimetype.split('/')[0] !== 'audio')
+      throw new HttpException('incorrect_music_file', 400);
+    if (img && img.mimetype.split('/')[0] !== 'image')
+      throw new HttpException('incorrect_img_file', 400);
 
     const songMeta = await parseBuffer(file.buffer);
-
     const toCommonPathFormat = (oldPath: string) =>
       oldPath ? '/' + oldPath.replace(/\\/g, '/') : null;
 
@@ -57,10 +60,9 @@ export class SongsService {
           songId: song.id,
         });
         return song;
-      } else {
-        return this.songs.save(song);
       }
     }
+    return this.songs.save(song);
   }
 
   findAll(name?: string) {

@@ -15,11 +15,23 @@ export class AuthorService {
     private readonly songsService: SongsService,
   ) {}
 
-  findAll(fetchSongs: string | boolean) {
-    return this.authors.find({
-      relations:
-        fetchSongs === true || fetchSongs === 'true' ? ['songs'] : undefined,
-    });
+  findAll(fetchSongs: string | boolean, name?: string) {
+    const relations = ['songs'];
+
+    const shouldFetchRelations = fetchSongs === true || fetchSongs === 'true';
+
+    if (!name)
+      return this.authors.find({
+        relations: shouldFetchRelations ? relations : undefined,
+      });
+
+    const authors = this.authors
+      .createQueryBuilder('author')
+      .select()
+      .where(`name ILIKE :name`, { name: `%${name}%` });
+
+    if (shouldFetchRelations) authors.loadAllRelationIds({ relations });
+    return authors.getMany();
   }
 
   findById(fetchSongs: string | boolean, id: number) {

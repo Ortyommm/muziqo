@@ -24,26 +24,26 @@ const playlistsSlice = createSlice({
 
 export const { setUserPlaylists } = playlistsSlice.actions;
 
-export const addSongToPlaylist =
-  (songId: number, playlistId: number) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const data = { songId, playlistId };
-
-    api.post(`playlists/add-song`, data);
-    // const updatedPlaylists = getState().playlists.userPlaylists.map(
-    //   (playlist) => {
-    //     if (playlist.id === playlistId) {
-    //       // const song = getAllSongs(getState().songs).find(
-    //       //   (song) => song.id === songId
-    //       // );
-    //       console.log(playlist.songs);
-    //       // if (song) playlist.songs = [...playlist.songs, song];
-    //     }
-    //     return playlist;
-    //   }
-    // );
-    // setUserPlaylists(updatedPlaylists);
-    // dispatch(addSongToPlaylist(data));
-  };
+// export const addSongToPlaylist =
+//   (songId: number, playlistId: number) =>
+//   (dispatch: AppDispatch, getState: () => RootState) => {
+//     const data = { songId, playlistId };
+//
+//     api.post(`playlists/song`, data);
+//     // const updatedPlaylists = getState().playlists.userPlaylists.map(
+//     //   (playlist) => {
+//     //     if (playlist.id === playlistId) {
+//     //       // const song = getAllSongs(getState().songs).find(
+//     //       //   (song) => song.id === songId
+//     //       // );
+//     //       console.log(playlist.songs);
+//     //       // if (song) playlist.songs = [...playlist.songs, song];
+//     //     }
+//     //     return playlist;
+//     //   }
+//     // );
+//     // setUserPlaylists(updatedPlaylists);
+//     // dispatch(addSongToPlaylist(data));
+//   };
 
 export default playlistsSlice.reducer;

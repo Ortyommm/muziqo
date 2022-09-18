@@ -1,28 +1,27 @@
 import AppList from "../AppList/AppList";
 import PlaylistItem from "./PlaylistItem";
 import { IPlaylist } from "../../types/PlaylistsTypes";
-import { useState } from "react";
-import { addSongToPlaylist } from "../../store/modules/playlists";
-import { useDispatch } from "react-redux";
-import { useAppDispatch } from "../../store";
+import { api } from "../../utils/api";
 
 export default function PlaylistsList({
   isFetching,
   items,
   songId,
+  onClose,
 }: {
   isFetching: boolean;
   items: IPlaylist[];
   songId: number;
+  onClose: () => void;
 }) {
   type ItemWithOnClick = IPlaylist & { onClick: (songId: number) => void };
-
-  const dispatch = useAppDispatch();
 
   const itemsWithOnClick: ItemWithOnClick[] = items.map((item) => {
     const itemWithOnClick = { ...item } as ItemWithOnClick;
     itemWithOnClick.onClick = () => {
-      dispatch(addSongToPlaylist(songId, item.id));
+      const data = { songId, playlistId: item.id };
+      api.post(`playlists/song`, data);
+      onClose();
     };
     return itemWithOnClick;
   });

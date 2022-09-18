@@ -1,12 +1,13 @@
 import { Grid } from "@mui/material";
 import * as React from "react";
 import { useAppSelector } from "../../store";
-import { getAllSongsExceptFavorites } from "../../store/modules/dispatchSong";
+import {
+  getAllSongs,
+  getAllSongsExceptFavorites,
+} from "../../store/modules/dispatchSong";
 
 export default function SongsData() {
-  const songs = useAppSelector((state) =>
-    getAllSongsExceptFavorites(state.songs)
-  );
+  const songs = useAppSelector((state) => getAllSongs(state.songs));
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
 
   const currentSong = songs.find((song) => song.id === currentSongId);

@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { IAuthorizedUserRequest } from '../auth/types';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UsersService } from '../users/users.service';
-import { AddSongToPlaylistDto } from './dto/add-song-to-playlist.dto';
+import { AddOrDeleteSongToPlaylistDto } from './dto/add-song-to-playlist.dto';
 import { SongsService } from '../songs/songs.service';
 
 @Injectable()
@@ -52,17 +52,34 @@ export class PlaylistsService {
     });
   }
 
-  async addSongToPlaylist(
+  private async getPlaylist(
     req: IAuthorizedUserRequest,
-    dto: AddSongToPlaylistDto,
+    dto: AddOrDeleteSongToPlaylistDto,
   ) {
     const playlist = await this.findById(dto.playlistId);
     if (playlist.user.id !== req.user.id)
       throw new HttpException('forbidden', 403);
+    return playlist;
+  }
+
+  async addSongToPlaylist(
+    req: IAuthorizedUserRequest,
+    dto: AddOrDeleteSongToPlaylistDto,
+  ) {
+    const playlist = await this.getPlaylist(req, dto);
 
     const song = await this.songsService.findById(true, dto.songId);
     playlist.songs.push(song);
-    console.log({ song });
+    return this.playlists.save(playlist);
+  }
+
+  async removeSongFromPlaylist(
+    req: IAuthorizedUserRequest,
+    dto: AddOrDeleteSongToPlaylistDto,
+  ) {
+    const playlist = await this.getPlaylist(req, dto);
+
+    playlist.songs = playlist.songs.filter((song) => song.id !== dto.songId);
     return this.playlists.save(playlist);
   }
 }

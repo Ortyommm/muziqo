@@ -20,9 +20,16 @@ import AppListItem from "../AppList/AppListItem";
 import { changeSong } from "../../store/modules/dispatchSong";
 import { pause, play } from "../../store/modules/audio";
 import PlaylistsDialog from "../PlaylistsDialog/PlaylistsDialog";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 
-export default function SongItem({ name, authors, id, file, duration }: ISong) {
+export default function SongItem({
+  name,
+  authors,
+  id,
+  file,
+  duration,
+  moreItems,
+}: ISong & { moreItems: ReactElement[] | ReactElement }) {
   const dispatch = useAppDispatch();
 
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
@@ -100,10 +107,9 @@ export default function SongItem({ name, authors, id, file, duration }: ISong) {
             </IconButton>
             <Menu open={moreOpen} onClose={onMoreClose} anchorEl={anchorEl}>
               <MenuItem onClick={onPlaylistClick}>
-                {/*<IconButton >*/}
                 <PlaylistAddIcon />
-                {/*</IconButton>*/}
               </MenuItem>
+              {moreItems}
             </Menu>
             <IconButton aria-label="comments" onClick={onFavoriteClick}>
               {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
