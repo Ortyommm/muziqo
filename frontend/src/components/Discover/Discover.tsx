@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";
 import { ISong } from "../../types/SongsTypes";
-import { setDiscoverSongs, setSearchSongs } from "../../store/modules/songs";
+import { setTempSongs } from "../../store/modules/songs";
 import {
   Container,
   Fab,
@@ -20,12 +20,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import { setSearchUsers } from "../../store/modules/users";
 import { IUser } from "../../types/UserTypes";
-import UsersList from "../UsersList/UsersList";
+import UsersList from "../UsersList/components/UsersList";
 import AddSongOrAuthor from "./AddSongOrAuthor";
 
 const Discover = () => {
-  const discoverSongs = useAppSelector((state) => state.songs.discover);
-  const searchSongs = useAppSelector((state) => state.songs.search);
+  // const discoverSongs = useAppSelector((state) => state.songs.discover);
+  const tempSongs = useAppSelector((state) => state.songs.temp);
   const searchUsers = useAppSelector((state) => state.users.search);
   const [searchText, setSearchText] = useState("");
 
@@ -50,7 +50,7 @@ const Discover = () => {
         api
           .get("/songs", { params: { name: event.target.value } })
           .then((res: AxiosResponse<ISong[]>) => {
-            dispatch(setSearchSongs(res.data));
+            dispatch(setTempSongs(res.data));
             setIsLoading(false);
           });
       }, 300)
@@ -62,7 +62,7 @@ const Discover = () => {
     api.get(searchItem).then((res: AxiosResponse<ISong[] | IUser[]>) => {
       switch (searchItem) {
         case "songs": {
-          dispatch(setDiscoverSongs(res.data as ISong[]));
+          dispatch(setTempSongs(res.data as ISong[]));
           break;
         }
         case "users": {
@@ -78,7 +78,7 @@ const Discover = () => {
     <>
       <Container>
         <Grid container>
-          <Grid item xs={2}>
+          <Grid item xs={4} lg={2}>
             <FormControl sx={{ width: "80%" }}>
               <InputLabel id="select-label">Search for</InputLabel>
               <Select
@@ -94,7 +94,7 @@ const Discover = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={8} lg={10}>
             <TextField
               value={searchText}
               onChange={onSearch}
@@ -111,10 +111,7 @@ const Discover = () => {
           </Grid>
         </Grid>
         {searchItem === "songs" ? (
-          <SongsList
-            songs={searchText ? searchSongs : discoverSongs}
-            isFetching={isLoading}
-          />
+          <SongsList songs={tempSongs} isFetching={isLoading} />
         ) : (
           <UsersList users={searchUsers} />
         )}

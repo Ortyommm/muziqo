@@ -1,10 +1,10 @@
 import React from "react";
-import PlaylistCard from "./PlaylistCard";
+import PlaylistCard from "./components/PlaylistCard";
 import { Container, Grid } from "@mui/material";
 import { useAppSelector } from "../../store";
 import AppList from "../AppList/AppList";
 
-const Playlists = () => {
+const PlaylistsPage = () => {
   const playlists = useAppSelector((state) => state.playlists.userPlaylists);
   const isLoading = useAppSelector((state) => state.auth.isUserDataLoading);
 
@@ -27,4 +27,4 @@ const Playlists = () => {
 //TODO one playlist page
 //TODO add playlists
 //TODO add songs to playlists
-export default Playlists;
+export default PlaylistsPage;

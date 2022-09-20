@@ -19,7 +19,7 @@ import { addFavorite, removeFavorite } from "../../store/modules/songs";
 import AppListItem from "../AppList/AppListItem";
 import { changeSong } from "../../store/modules/dispatchSong";
 import { pause, play } from "../../store/modules/audio";
-import PlaylistsDialog from "../PlaylistsDialog/PlaylistsDialog";
+import PlaylistsDialog from "../Playlists/PlaylistsDialog";
 import React, { ReactElement, useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -99,7 +99,9 @@ export default function SongItem({
               color: (theme) => theme.palette.text.primary,
             }}
           >
-            <Typography sx={{ mr: 2 }}>
+            <Typography
+              sx={{ mr: 2, display: { xs: "none", sm: "none", md: "block" } }}
+            >
               {isCurrent ? `${durationConverter(currentTime)} /` : ""}{" "}
               {durationConverter(+duration)}
             </Typography>
@@ -123,12 +125,26 @@ export default function SongItem({
         </IconButton>
         <Typography
           variant="h6"
-          sx={{ color: (theme) => theme.palette.text.primary, mr: 1 }}
+          sx={{
+            color: (theme) => theme.palette.text.primary,
+            mr: 1,
+            fontSize: { xs: 14, sm: 14, md: 16 },
+          }}
         >
-          {name} |
+          {name}{" "}
+          <Box
+            component="span"
+            sx={{ display: { sm: "none", xs: "none", md: "inline" } }}
+          >
+            {authors?.[0] && "|"}
+          </Box>
         </Typography>
         <Typography
-          sx={{ color: (theme) => theme.palette.text.secondary, fontSize: 11 }}
+          sx={{
+            color: (theme) => theme.palette.text.secondary,
+            fontSize: 11,
+            display: { md: "block", sm: "none", xs: "none" },
+          }}
         >
           {/*TODO many authors*/}
           {authors?.[0]?.name}

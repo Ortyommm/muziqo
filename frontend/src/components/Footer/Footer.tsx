@@ -1,8 +1,10 @@
-import { Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import * as React from "react";
 import VolumeControl from "./VolumeControl";
 import PlayControls from "./PlayControls";
 import SongsData from "./SongsData";
+import PrevPlayNext from "./components/PrevPlayNext";
+import ShuffleAndRepeat from "./components/ShuffleAndRepeat";
 
 export default function Footer() {
   return (
@@ -12,16 +14,33 @@ export default function Footer() {
         bottom: 0,
         left: 0,
         right: 0,
-        height: 64,
+        height: { xs: 100, md: 64 },
         elevation: 3,
         display: "flex",
       }}
     >
-      <Grid container alignItems="center">
-        <SongsData />
-        <PlayControls />
-        <VolumeControl />
-      </Grid>
+      <Box
+        sx={{
+          width: "100%",
+          display: { xs: "block", md: "flex" },
+          alignItems: "center",
+        }}
+      >
+        <Grid container alignItems="center">
+          <SongsData />
+          <PlayControls />
+          <VolumeControl />
+        </Grid>
+        <Grid container sx={{ display: { xs: "flex", md: "none" } }}>
+          <Grid item xs={4} ml={2}>
+            <ShuffleAndRepeat />
+          </Grid>
+          <Grid item xs={7}>
+            <PrevPlayNext />
+          </Grid>
+          {/*<VolumeControl />*/}
+        </Grid>
+      </Box>
     </Paper>
   );
 }

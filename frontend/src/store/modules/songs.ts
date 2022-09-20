@@ -6,20 +6,20 @@ import { AxiosResponse } from "axios";
 import { shuffle } from "lodash-es";
 
 export interface ISongsState {
-  discover: ISong[];
+  // discover: ISong[];
   favorites: ISong[];
-  search: ISong[];
+  temp: ISong[];
   currentSongsSource: SongsSources;
   //special
   shuffled: ISong[];
 }
 
-export type SongsSources = "discover" | "favorites" | "search";
+export type SongsSources = /*"discover"*/ "favorites" | "temp";
 
 const initialState: ISongsState = {
-  discover: [],
+  // discover: [],
   favorites: [],
-  search: [],
+  temp: [],
   currentSongsSource: "favorites",
   shuffled: [],
 };
@@ -31,11 +31,11 @@ const songsSlice = createSlice({
     setFavorites(state, action: PayloadAction<ISong[]>) {
       state.favorites = action.payload;
     },
-    setDiscoverSongs(state, action: PayloadAction<ISong[]>) {
-      state.discover = action.payload;
-    },
-    setSearchSongs(state, action: PayloadAction<ISong[]>) {
-      state.search = action.payload;
+    // setDiscoverSongs(state, action: PayloadAction<ISong[]>) {
+    //   state.discover = action.payload;
+    // },
+    setTempSongs(state, action: PayloadAction<ISong[]>) {
+      state.temp = action.payload;
     },
     _setCurrentSongsSource(state, action: PayloadAction<SongsSources>) {
       // if (state.currentSongsSource !== action.payload) {
@@ -68,7 +68,7 @@ export const setCurrentSongsSource =
 export const addFavorite =
   (songId: number) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const song = getState().songs.discover.find((song) => song.id === songId);
+    const song = getState().songs.temp.find((song) => song.id === songId);
     if (song) {
       api.post("users/favorite", { songId });
       dispatch(setFavorites([...getState().songs.favorites, song]));
@@ -78,7 +78,7 @@ export const addFavorite =
 export const removeFavorite =
   (songId: number) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const song = getState().songs.discover.find((song) => song.id === songId);
+    const song = getState().songs.temp.find((song) => song.id === songId);
     if (song) {
       api.delete("users/favorite", { data: { songId } });
       dispatch(
@@ -93,15 +93,11 @@ export const addSongToDiscover =
   (data: FormData) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     api.post("songs/upload", data).then((res: AxiosResponse<ISong>) => {
-      dispatch(setDiscoverSongs([...getState().songs.discover, res.data]));
+      dispatch(setTempSongs([...getState().songs.temp, res.data]));
     });
   };
 
-export const {
-  setFavorites,
-  setDiscoverSongs,
-  setSearchSongs,
-  setShuffledSongs,
-} = songsSlice.actions;
+export const { setFavorites, setTempSongs, setShuffledSongs } =
+  songsSlice.actions;
 
 export default songsSlice.reducer;

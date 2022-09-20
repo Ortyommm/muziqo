@@ -6,9 +6,9 @@ import { AxiosResponse } from "axios";
 import { IPlaylist } from "../../types/PlaylistsTypes";
 import SongsList from "../SongsList/SongsList";
 import { ISong } from "../../types/SongsTypes";
-import PlaylistRemoveItem from "./PlaylistRemoveItem";
+import PlaylistRemoveItem from "./components/PlaylistRemoveItem";
 
-export default function PlaylistPage() {
+export default function PlaylistSongsPage() {
   const params = useParams();
   const [playlistData, setPlaylistData] = useState<IPlaylist | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);

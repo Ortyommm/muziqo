@@ -10,10 +10,11 @@ import { getUserData } from "./store/modules/user";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./store";
 import ProtectedRoute from "./components/AppRouter/ProtectedRoute";
-import Playlists from "./components/Playlists/Playlists";
+import PlaylistsPage from "./components/Playlists/PlaylistsPage";
 import Discover from "./components/Discover/Discover";
 import Home from "./components/Home/Home";
-import PlaylistPage from "./components/Playlists/PlaylistPage";
+import PlaylistSongsPage from "./components/Playlists/PlaylistSongsPage";
+import UsersPage from "./components/UsersList/UsersPage";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ export default function App() {
           path="/playlists"
           element={
             <ProtectedRoute>
-              <Playlists />
+              <PlaylistsPage />
             </ProtectedRoute>
           }
         />
@@ -52,15 +53,23 @@ export default function App() {
           path="/playlists"
           element={
             <ProtectedRoute>
-              <Playlists />
+              <PlaylistsPage />
             </ProtectedRoute>
           }
         ></Route>
         <Route
+          path="/users/:id"
+          element={
+            <ProtectedRoute>
+              <UsersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/playlists/:id"
           element={
             <ProtectedRoute>
-              <PlaylistPage />
+              <PlaylistSongsPage />
             </ProtectedRoute>
           }
         />

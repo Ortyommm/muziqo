@@ -10,7 +10,11 @@ import { ISong } from "../../types/SongsTypes";
 import { ISongsState, setCurrentSongsSource, setShuffledSongs } from "./songs";
 
 function getCurrentSongsByLocation() {
-  if (window.location.pathname === "/discover") return "discover";
+  if (
+    window.location.pathname === "/discover" ||
+    window.location.pathname.startsWith("/users/")
+  )
+    return "temp";
   return "favorites";
 }
 
@@ -98,7 +102,7 @@ function playNextSongInShuffled() {
 }
 
 function getAllSongsExceptFavorites(state: ISongsState) {
-  return [...state.search, ...state.discover];
+  return [...state.temp /*...state.discover*/];
 }
 
 function getAllSongs(state: ISongsState) {

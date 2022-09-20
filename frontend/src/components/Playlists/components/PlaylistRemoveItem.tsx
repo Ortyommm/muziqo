@@ -1,7 +1,6 @@
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import { MenuItem } from "@mui/material";
-import { ISong } from "../../types/SongsTypes";
-import { api } from "../../utils/api";
+import { api } from "../../../utils/api";
 
 export default function PlaylistRemoveItem({
   songId,

@@ -1,9 +1,8 @@
-import AppList from "../AppList/AppList";
-import PlaylistItem from "./PlaylistItem";
-import { IPlaylist } from "../../types/PlaylistsTypes";
-import { api } from "../../utils/api";
+import { IPlaylist } from "../../../types/PlaylistsTypes";
+import { api } from "../../../utils/api";
+import PlaylistsList from "./../components/PlaylistsList";
 
-export default function PlaylistsList({
+export default function PlaylistsListModal({
   isFetching,
   items,
   songId,
@@ -13,6 +12,7 @@ export default function PlaylistsList({
   items: IPlaylist[];
   songId: number;
   onClose: () => void;
+  useCard?: boolean;
 }) {
   type ItemWithOnClick = IPlaylist & { onClick: (songId: number) => void };
 
@@ -27,10 +27,10 @@ export default function PlaylistsList({
   });
 
   return (
-    <AppList
+    <PlaylistsList
       isFetching={isFetching}
       items={itemsWithOnClick}
-      Element={PlaylistItem}
+      useCard={false}
     />
   );
 }

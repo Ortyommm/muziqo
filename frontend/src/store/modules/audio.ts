@@ -187,7 +187,9 @@ export const toggleShuffle =
 export const fetchFileAndGetUrl =
   (audioSrc: string) => async (dispatch: AppDispatch) => {
     // dispatch(pause());
-    const audioFileSrc = await rawFetchFileAndGetUrl(audioSrc);
+    const audioFileSrc =
+      "http://127.0.0.1:5000" +
+      audioSrc; /*await rawFetchFileAndGetUrl(audioSrc);*/
     dispatch(setAudioControllerSrc(audioFileSrc));
     // dispatch(play());
   };

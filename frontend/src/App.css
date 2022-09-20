@@ -2,3 +2,10 @@
   /*footer size*/
   margin-bottom: 64px;
 }
+
+@media (max-width: 900px) {
+  .MuiContainer-root {
+    /*footer size*/
+    margin-bottom: 100px;
+  }
+}

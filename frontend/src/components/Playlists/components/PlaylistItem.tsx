@@ -1,4 +1,4 @@
-import AppListItem from "../AppList/AppListItem";
+import AppListItem from "../../AppList/AppListItem";
 
 export default function PlaylistItem({
   name,

@@ -40,19 +40,27 @@ export default function AppHeader() {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
+            {/*<IconButton*/}
+            {/*  size="large"*/}
+            {/*  edge="start"*/}
+            {/*  color="inherit"*/}
+            {/*  aria-label="menu"*/}
+            {/*  sx={{ mr: 2 }}*/}
+            {/*>*/}
+            {/*  <MenuIcon />*/}
+            {/*</IconButton>*/}
+            <Typography
+              variant="h6"
+              component="div"
+              pb={0.75}
+              sx={{
+                mr: { md: 6, xs: 2, xl: 10 },
+                display: { xs: "none", sm: "block" },
+              }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" pb={0.75} mr={10}>
               Muziqo
             </Typography>
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ display: "flex" }}>
               {pages.map((page) => (
                 <NavLink
                   to={page.to}
@@ -63,7 +71,10 @@ export default function AppHeader() {
                     variant="text"
                     color="primary"
                     sx={{
-                      mr: 3,
+                      mr: {
+                        xs: 1,
+                        sm: 3,
+                      },
                       color: "white",
                       display: "flex",
                       alignItems: "center",
@@ -73,7 +84,9 @@ export default function AppHeader() {
                     <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
                       {page.icon}
                     </Box>
-                    <Box>{page.name}</Box>
+                    <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                      {page.name}
+                    </Box>
                   </Button>
                 </NavLink>
               ))}

@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useAppSelector } from "../../store";
-import PlaylistsList from "../Playlists/PlaylistsList";
+import PlaylistsListModal from "./components/PlaylistsListModal";
 
 export default function PlaylistsDialog({
   open,
@@ -17,7 +17,7 @@ export default function PlaylistsDialog({
     <Dialog fullWidth open={open} onClose={onClose}>
       <DialogTitle id="alert-dialog-title">Select playlist</DialogTitle>
       <DialogContent>
-        <PlaylistsList
+        <PlaylistsListModal
           items={playlists}
           isFetching={false}
           songId={songId}

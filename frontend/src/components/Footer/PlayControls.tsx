@@ -19,29 +19,15 @@ import {
   getNextSong,
   getPrevSong,
 } from "../../store/modules/dispatchSong";
+import ShuffleAndRepeat from "./components/ShuffleAndRepeat";
+import PrevPlayNext from "./components/PrevPlayNext";
 
 export default function PlayControls() {
   const dispatch = useAppDispatch();
 
-  const currentSongsSource = useAppSelector(
-    (state) => state.songs.currentSongsSource
-  );
-
-  const songs = useAppSelector((state) => state.songs[currentSongsSource]);
-  const currentSongId = useAppSelector((state) => state.audio.currentSongId);
-
-  const shuffle = useAppSelector((state) => state.audio.shuffle);
-  const repeat = useAppSelector((state) => state.audio.repeat);
-
   const currentTime = useAppSelector((state) => state.audio.currentTime);
   const duration = useAppSelector((state) => state.audio.duration);
   const currentTimePercent = duration ? (currentTime / duration) * 100 : 0;
-
-  const isPlaying = useAppSelector((state) => state.audio.isPlaying);
-
-  function onSongToggle() {
-    dispatch(toggle());
-  }
 
   function onCurrentTimeChange(event: Event, value: number | number[]) {
     if (Array.isArray(value) || !duration) return;
@@ -49,69 +35,27 @@ export default function PlayControls() {
     dispatch(setCurrentTimeBySlider((duration / 100) * value));
   }
 
-  function onPrevClick() {
-    changeSong(
-      { ...getPrevSong(songs, currentSongId), changeSource: false },
-      dispatch
-    );
-  }
-
-  function onNextClick() {
-    changeSong(
-      { ...getNextSong(songs, currentSongId), changeSource: false },
-      dispatch
-    );
-  }
-
-  function onRepeat() {
-    dispatch(toggleRepeat());
-  }
-
-  function onShuffle() {
-    dispatch(toggleShuffle());
-  }
-
   return (
     <Grid xs={6} container item alignItems="center">
-      <Grid container item xs={1.5}>
-        <Grid item xs={6}>
-          <IconButton onClick={onRepeat}>
-            <RepeatIcon color={repeat ? "primary" : undefined} />
-          </IconButton>
-        </Grid>
-        <Grid item xs={6}>
-          <IconButton onClick={onShuffle}>
-            <ShuffleIcon color={shuffle ? "primary" : undefined} />
-          </IconButton>
-        </Grid>
+      <Grid
+        container
+        item
+        xs={2.5}
+        sx={{ display: { xs: "none", md: "flex" } }}
+      >
+        <ShuffleAndRepeat />
       </Grid>
-      <Grid item xs={7.5}>
-        <Slider
-          value={currentTimePercent}
-          onChange={onCurrentTimeChange}
-          // aria-labelledby="input-slider"
-        />
+      <Grid item xs={12} md={5}>
+        <Slider value={currentTimePercent} onChange={onCurrentTimeChange} />
       </Grid>
-      <Grid xs={3} container item justifyContent="flex-end">
-        <Grid container justifyContent="flex-end" item xs={4}>
-          <IconButton onClick={onPrevClick}>
-            <SkipPreviousIcon />
-          </IconButton>
-        </Grid>
-        <Grid item xs={4}>
-          <Button
-            variant="outlined"
-            sx={{ width: "100%" }}
-            onClick={onSongToggle}
-          >
-            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-          </Button>
-        </Grid>
-        <Grid item xs={4}>
-          <IconButton onClick={onNextClick}>
-            <SkipNextIcon />
-          </IconButton>
-        </Grid>
+      <Grid
+        xs={4.5}
+        container
+        item
+        justifyContent="flex-end"
+        sx={{ display: { xs: "none", md: "flex" } }}
+      >
+        <PrevPlayNext />
       </Grid>
     </Grid>
   );
