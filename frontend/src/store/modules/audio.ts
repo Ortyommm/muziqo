@@ -16,7 +16,9 @@ import {
 import { shuffle } from "lodash-es";
 import { setShuffledSongs } from "./songs";
 
+const initialVolume = +(localStorage.getItem("volume") || 1);
 const audioController = new Audio();
+audioController.volume = initialVolume;
 audioController.ontimeupdate = (event) =>
   store.dispatch(
     setCurrentTime((event.target! as HTMLAudioElement).currentTime)
@@ -59,7 +61,7 @@ const initialState: IAudioState = {
   currentTime: 0,
   duration: null,
   audioSrc: null,
-  volume: 1,
+  volume: initialVolume,
   shuffle: false,
   repeat: false,
 };
@@ -91,6 +93,7 @@ const audioSlice = createSlice({
     },
     setVolume(state, action: PayloadAction<number>) {
       audioController.volume = state.volume = action.payload;
+      localStorage.setItem("volume", action.payload.toString());
     },
     setCurrentSongId(state, action: PayloadAction<number>) {
       state.currentSongId = action.payload;
