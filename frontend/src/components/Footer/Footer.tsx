@@ -5,8 +5,12 @@ import PlayControls from "./PlayControls";
 import SongsData from "./SongsData";
 import PrevPlayNext from "./components/PrevPlayNext";
 import ShuffleAndRepeat from "./components/ShuffleAndRepeat";
+import { useLocation } from "react-router-dom";
 
 export default function Footer() {
+  const location = useLocation();
+
+  if (location.pathname === "/auth") return <></>;
   return (
     <Paper
       sx={{

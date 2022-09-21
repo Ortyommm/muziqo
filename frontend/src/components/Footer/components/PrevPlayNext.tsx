@@ -28,6 +28,9 @@ export default function PrevPlayNext() {
     dispatch(toggle());
   }
 
+  navigator.mediaSession.setActionHandler("nexttrack", onNextClick);
+  navigator.mediaSession.setActionHandler("previoustrack", onPrevClick);
+
   function onPrevClick() {
     changeSong(
       { ...getPrevSong(songs, currentSongId), changeSource: false },
