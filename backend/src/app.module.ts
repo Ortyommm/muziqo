@@ -21,7 +21,7 @@ import { PlaylistEntity } from './playlists/entities/playlist.entity';
   imports: [
     AuthModule,
     ConfigModule.forRoot({
-      envFilePath: path.resolve(__dirname, '..', '..', '.env'),
+      // envFilePath: path.resolve(__dirname, '..', '..', '.env'),
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
