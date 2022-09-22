@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../index";
 import { api } from "../../utils/api";
 import { getAllSongs } from "./dispatchSong";
+import { AxiosResponse } from "axios";
 
 export interface IPlaylistsState {
   userPlaylists: IPlaylist[];
@@ -21,6 +22,18 @@ const playlistsSlice = createSlice({
     },
   },
 });
+
+export const addPlaylist =
+  ({ name, description }: { name: string; description: string }) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    api
+      .post("playlists", { name, description })
+      .then((res: AxiosResponse<IPlaylist>) => {
+        dispatch(
+          setUserPlaylists([...getState().playlists.userPlaylists, res.data])
+        );
+      });
+  };
 
 export const { setUserPlaylists } = playlistsSlice.actions;
 

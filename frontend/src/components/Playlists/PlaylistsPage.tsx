@@ -3,6 +3,7 @@ import PlaylistCard from "./components/PlaylistCard";
 import { Container, Grid } from "@mui/material";
 import { useAppSelector } from "../../store";
 import AppList from "../AppList/AppList";
+import AddPlaylist from "./components/AddPlaylist";
 
 const PlaylistsPage = () => {
   const playlists = useAppSelector((state) => state.playlists.userPlaylists);
@@ -10,21 +11,16 @@ const PlaylistsPage = () => {
 
   return (
     <Container>
-      <Grid container>
+      <Grid container alignItems="stretch">
         <AppList
           Element={PlaylistCard}
           isFetching={isLoading}
           items={playlists}
         />
-        {/*<Grid item xs={3}>*/}
-        {/*  <PlaylistCard id={1} name="Король и Шут" />*/}
-        {/*</Grid>*/}
       </Grid>
+      <AddPlaylist />
     </Container>
   );
 };
-//TODO use real playlists
-//TODO one playlist page
 //TODO add playlists
-//TODO add songs to playlists
 export default PlaylistsPage;

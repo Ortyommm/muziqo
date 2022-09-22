@@ -14,6 +14,7 @@ import {
 import React, { useState } from "react";
 import AddSongForm from "./AddSongForm";
 import AddAuthorForm from "./AddAuthorForm";
+import AddFab from "../AddFab/AddFab";
 
 export default function AddSongOrAuthor() {
   type AddItems = "author" | "song";
@@ -55,14 +56,7 @@ export default function AddSongOrAuthor() {
           <AddAuthorForm onClose={onClose} />
         ) : null}
       </Dialog>
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{ position: "fixed", right: 16, bottom: 100 }}
-        onClick={() => setOpen(true)}
-      >
-        <AddIcon />
-      </Fab>
+      <AddFab onClick={() => setOpen(true)} />
     </>
   );
 }

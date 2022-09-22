@@ -6,8 +6,15 @@ import { IUser } from "../../types/UserTypes";
 import { setFavorites } from "./songs";
 import { setUserPlaylists } from "./playlists";
 
-const initialState: { token: string | null; isUserDataLoading: boolean } = {
+interface IUserState {
+  token: string | null;
+  isUserDataLoading: boolean;
+  authorizedUser: { id: number; name: string } | null;
+}
+
+const initialState: IUserState = {
   token: localStorage.getItem("token"),
+  authorizedUser: null,
   isUserDataLoading: false,
 };
 
@@ -22,6 +29,12 @@ const userSlice = createSlice({
     setIsUserDataLoading(state, action: PayloadAction<boolean>) {
       state.isUserDataLoading = action.payload;
     },
+    setAuthorizedUser(
+      state,
+      action: PayloadAction<IUserState["authorizedUser"]>
+    ) {
+      state.authorizedUser = action.payload;
+    },
   },
 });
 
@@ -33,11 +46,13 @@ export const getUserData =
       .then((res: AxiosResponse<IUser>) => {
         dispatch(setFavorites(res.data.favorites));
         dispatch(setUserPlaylists(res.data.playlists));
+        dispatch(setAuthorizedUser({ id: res.data.id, name: res.data.name }));
       })
       .finally(() => {
         dispatch(setIsUserDataLoading(false));
       });
   };
 
-export const { setToken, setIsUserDataLoading } = userSlice.actions;
+export const { setToken, setIsUserDataLoading, setAuthorizedUser } =
+  userSlice.actions;
 export default userSlice.reducer;

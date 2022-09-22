@@ -1,11 +1,11 @@
 .MuiContainer-root {
-  /*footer size*/
-  margin-bottom: 64px;
+  /*footer size: 64px*/
+  margin-bottom: 80px;
 }
 
 @media (max-width: 900px) {
   .MuiContainer-root {
-    /*footer size*/
-    margin-bottom: 100px;
+    /*footer size: 100px */
+    margin-bottom: 120px;
   }
 }

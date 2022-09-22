@@ -10,23 +10,27 @@ import { ReactNode } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import BoltIcon from "@mui/icons-material/Bolt";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
+import { useAppSelector } from "../../store";
 class AppHeaderPage {
   constructor(public name: string, public icon: ReactNode, public to: string) {}
 }
 
+const pages = [
+  // new AppHeaderPage("Home", <HomeIcon />, ""),
+  new AppHeaderPage("Favourites", <FavoriteIcon fontSize="small" />, ""),
+  new AppHeaderPage("Playlists", <QueueMusicIcon />, "playlists"),
+  new AppHeaderPage("Discover", <BoltIcon />, "discover"),
+];
+
 export default function AppHeader() {
-  const pages = [
-    new AppHeaderPage("Home", <HomeIcon />, ""),
-    // new AppHeaderPage(
-    //   "Favourites",
-    //   <FavoriteIcon fontSize="small" />,
-    //   "favorites"
-    // ),
-    new AppHeaderPage("Playlists", <QueueMusicIcon />, "playlists"),
-    new AppHeaderPage("Discover", <BoltIcon />, "discover"),
-  ];
+  const navigate = useNavigate();
+  const userId = useAppSelector((state) => state.auth.authorizedUser?.id);
+
+  function onAccountClick() {
+    navigate(`/users/${userId}`);
+  }
 
   return (
     <AppBar position="static">
@@ -100,6 +104,7 @@ export default function AppHeader() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               color="inherit"
+              onClick={onAccountClick}
             >
               <AccountCircle />
             </IconButton>
