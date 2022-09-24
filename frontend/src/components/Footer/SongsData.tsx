@@ -14,14 +14,26 @@ export default function SongsData() {
 
   if (!currentSong) return <Grid item xs={3} />;
 
+  const textStyle = {
+    width: { xs: "100%" },
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+  };
   return (
     <Grid item xs={3}>
       <Grid sx={{ ml: 3 }}>
-        <Grid item>{currentSong.name}</Grid>
+        <Grid item sx={textStyle}>
+          {currentSong.name}
+        </Grid>
         {/*TODO all authors*/}
         <Grid
           item
-          sx={{ color: (theme) => theme.palette.grey.A700, fontSize: 12 }}
+          sx={{
+            color: (theme) => theme.palette.grey.A700,
+            fontSize: 12,
+            ...textStyle,
+          }}
         >
           {currentSong.authors?.[0]?.name}
         </Grid>
