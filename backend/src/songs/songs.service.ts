@@ -65,17 +65,18 @@ export class SongsService {
     return this.songs.save(song);
   }
 
-  findAll(name?: string) {
-    if (!name)
-      return this.songs.find({
-        relations: ['authors'],
-      });
+  findAll(name?: string, page?: number) {
+    const songsLimit = 50;
 
-    return this.songs
-      .createQueryBuilder()
-      .select()
-      .where(`name ILIKE :name`, { name: `%${name}%` })
+    const songs = this.songs.createQueryBuilder().select();
+    if (name) songs.where(`name ILIKE :name`, { name: `%${name}%` });
+
+    const items = songs
+      .limit(songsLimit)
+      .offset(songsLimit * page)
       .getMany();
+
+    return items;
   }
 
   async deleteSong(dto: DeleteSongDto) {

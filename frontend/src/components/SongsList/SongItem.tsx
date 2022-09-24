@@ -30,7 +30,11 @@ export default function SongItem({
   file,
   duration,
   moreItems,
-}: ISong & { moreItems: ReactElement[] | ReactElement }) {
+  style,
+}: ISong & {
+  moreItems: ReactElement[] | ReactElement;
+  style?: React.CSSProperties;
+}) {
   const dispatch = useAppDispatch();
 
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
@@ -91,6 +95,7 @@ export default function SongItem({
         songId={id}
       />
       <AppListItem
+        style={style}
         secondaryAction={
           <Box
             sx={{
@@ -123,32 +128,43 @@ export default function SongItem({
         <IconButton sx={{ mr: 2 }} onClick={onAudioClick}>
           {isCurrent && isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
-        <Typography
-          variant="h6"
+        <Box
           sx={{
-            color: (theme) => theme.palette.text.primary,
-            mr: 1,
-            fontSize: { xs: 14, sm: 14, md: 16 },
+            display: "flex",
+            alignItems: "center",
+            width: { xs: "63%", sm: "79%" },
           }}
         >
-          {name}{" "}
-          <Box
-            component="span"
-            sx={{ display: { sm: "none", xs: "none", md: "inline" } }}
+          <Typography
+            variant="h6"
+            sx={{
+              color: (theme) => theme.palette.text.primary,
+              mr: 1,
+              fontSize: { xs: 14, sm: 14, md: 16 },
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
           >
-            {authors?.[0] && "|"}
-          </Box>
-        </Typography>
-        <Typography
-          sx={{
-            color: (theme) => theme.palette.text.secondary,
-            fontSize: 11,
-            display: { md: "block", sm: "none", xs: "none" },
-          }}
-        >
-          {/*TODO many authors*/}
-          {authors?.[0]?.name}
-        </Typography>
+            {name}{" "}
+            <Box
+              component="span"
+              sx={{ display: { sm: "none", xs: "none", md: "inline" } }}
+            >
+              {authors?.[0] && "|"}
+            </Box>
+          </Typography>
+          <Typography
+            sx={{
+              color: (theme) => theme.palette.text.secondary,
+              fontSize: 11,
+              display: { md: "block", sm: "none", xs: "none" },
+            }}
+          >
+            {/*TODO many authors*/}
+            {authors?.[0]?.name}
+          </Typography>
+        </Box>
       </AppListItem>
     </>
   );

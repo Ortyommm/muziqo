@@ -141,7 +141,7 @@ export default function AddSongForm({ onClose }: { onClose: () => void }) {
             <input
               type="file"
               hidden
-              accept=".mp3, .wav, .ogg"
+              accept=".mp3, .wav, .ogg, .m4a"
               ref={songInput}
               onChange={(event) => setSongFile(event.target.value)}
             />

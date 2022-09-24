@@ -1,0 +1,19 @@
+.list {
+  @media (min-width: 600px) {
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      //width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #90caf9;
+      border-radius: 1em;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+  }
+}

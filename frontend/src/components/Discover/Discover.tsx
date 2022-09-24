@@ -14,6 +14,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -24,20 +25,21 @@ import UsersList from "../UsersList/components/UsersList";
 import AddSongOrAuthor from "./AddSongOrAuthor";
 
 const Discover = () => {
+  const dispatch = useAppDispatch();
   // const discoverSongs = useAppSelector((state) => state.songs.discover);
   const tempSongs = useAppSelector((state) => state.songs.temp);
   const searchUsers = useAppSelector((state) => state.users.search);
   const [searchText, setSearchText] = useState("");
 
-  const dispatch = useAppDispatch();
-  //TODO maybe move to state
   const [isLoading, setIsLoading] = useState(true);
 
   const [searchTimeout, setSearchTimeout] = useState(0);
   type SearchItems = "songs" | "users";
   const [searchItem, setSearchItem] = useState<SearchItems>("songs");
 
-  //TODO authorSearch, userSearch
+  const [currentPage, setCurrentPage] = useState(0);
+
+  //TODO authorSearch
 
   function onSearch(
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -48,7 +50,9 @@ const Discover = () => {
     setSearchTimeout(
       window.setTimeout(() => {
         api
-          .get("/songs", { params: { name: event.target.value } })
+          .get("/songs", {
+            params: { name: event.target.value, page: currentPage },
+          })
           .then((res: AxiosResponse<ISong[]>) => {
             dispatch(setTempSongs(res.data));
             setIsLoading(false);
@@ -58,21 +62,41 @@ const Discover = () => {
   }
 
   useEffect(() => {
-    setIsLoading(true);
-    api.get(searchItem).then((res: AxiosResponse<ISong[] | IUser[]>) => {
-      switch (searchItem) {
-        case "songs": {
-          dispatch(setTempSongs(res.data as ISong[]));
-          break;
+    if (!currentPage) setIsLoading(true);
+    api
+      .get(searchItem, { params: { page: currentPage } })
+      .then((res: AxiosResponse<ISong[] | IUser[]>) => {
+        switch (searchItem) {
+          case "songs": {
+            dispatch(
+              setTempSongs(
+                currentPage
+                  ? [...tempSongs, ...(res.data as ISong[])]
+                  : (res.data as ISong[])
+              )
+            );
+            break;
+          }
+          case "users": {
+            dispatch(setSearchUsers(res.data as IUser[]));
+            break;
+          }
         }
-        case "users": {
-          dispatch(setSearchUsers(res.data as IUser[]));
-          break;
-        }
-      }
-      setIsLoading(false);
-    });
-  }, [searchItem]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [searchItem, currentPage]);
+
+  function loadMoreItems() {
+    console.log("was here");
+    setCurrentPage(currentPage + 1);
+  }
+
+  function onSearchItem(event: SelectChangeEvent) {
+    setCurrentPage(0);
+    setSearchItem(event.target.value as SearchItems);
+  }
 
   return (
     <>
@@ -85,9 +109,7 @@ const Discover = () => {
                 labelId="select-label"
                 label="Search for"
                 value={searchItem}
-                onChange={(event) =>
-                  setSearchItem(event.target.value as SearchItems)
-                }
+                onChange={onSearchItem}
               >
                 <MenuItem value="songs">Songs</MenuItem>
                 <MenuItem value="users">Users</MenuItem>
@@ -111,7 +133,11 @@ const Discover = () => {
           </Grid>
         </Grid>
         {searchItem === "songs" ? (
-          <SongsList songs={tempSongs} isFetching={isLoading} />
+          <SongsList
+            songs={tempSongs}
+            isFetching={isLoading}
+            loadMoreItems={loadMoreItems}
+          />
         ) : (
           <UsersList users={searchUsers} />
         )}

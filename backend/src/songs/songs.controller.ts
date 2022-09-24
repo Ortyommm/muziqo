@@ -2,25 +2,14 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
-  ParseFilePipe,
   Post,
   Query,
-  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
-import {
-  AnyFilesInterceptor,
-  FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -50,8 +39,8 @@ export class SongsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@Query('name') name?: string) {
-    return this.songsService.findAll(name);
+  findAll(@Query('name') name?: string, @Query('page') page?: string) {
+    return this.songsService.findAll(name, +page);
   }
 
   @Delete()
