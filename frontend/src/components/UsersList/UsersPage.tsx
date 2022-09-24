@@ -29,7 +29,7 @@ export default function UsersPage() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [params.id]);
 
   if (isLoading) return <CircleCenterProgress />;
 
