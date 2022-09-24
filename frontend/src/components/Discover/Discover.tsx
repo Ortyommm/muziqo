@@ -32,6 +32,7 @@ const Discover = () => {
   const [searchText, setSearchText] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isAllDataFetched, setIsAllDataFetched] = useState(false);
 
   const [searchTimeout, setSearchTimeout] = useState(0);
   type SearchItems = "songs" | "users";
@@ -75,6 +76,7 @@ const Discover = () => {
                   : (res.data as ISong[])
               )
             );
+            if (res.data.length < 50) setIsAllDataFetched(true);
             break;
           }
           case "users": {
@@ -88,13 +90,14 @@ const Discover = () => {
       });
   }, [searchItem, currentPage]);
 
-  function loadMoreItems() {
-    console.log("was here");
-    setCurrentPage(currentPage + 1);
+  function loadMoreItems(startIndex: number, stopIndex: number) {
+    if (isAllDataFetched) return;
+    if (stopIndex > tempSongs.length * 0.8) setCurrentPage(currentPage + 1);
   }
 
   function onSearchItem(event: SelectChangeEvent) {
     setCurrentPage(0);
+    setIsAllDataFetched(false);
     setSearchItem(event.target.value as SearchItems);
   }
 

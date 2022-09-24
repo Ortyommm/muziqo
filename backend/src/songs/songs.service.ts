@@ -74,6 +74,7 @@ export class SongsService {
     const items = songs
       .limit(songsLimit)
       .offset(songsLimit * page)
+      .loadAllRelationIds({ relations: ['authors'] })
       .getMany();
 
     return items;

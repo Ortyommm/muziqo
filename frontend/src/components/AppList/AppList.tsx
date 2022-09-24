@@ -77,8 +77,9 @@ export default function AppList({
     return (
       <InfiniteLoader
         itemCount={items.length}
-        isItemLoaded={() => false}
+        isItemLoaded={(index: number) => false}
         loadMoreItems={loadMoreItems}
+        threshold={10}
       >
         {FixedSizeListBase}
       </InfiniteLoader>
