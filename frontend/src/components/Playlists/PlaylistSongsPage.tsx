@@ -7,9 +7,13 @@ import { IPlaylist } from "../../types/PlaylistsTypes";
 import SongsList from "../SongsList/SongsList";
 import { ISong } from "../../types/SongsTypes";
 import PlaylistRemoveItem from "./components/PlaylistRemoveItem";
+import { setTempSongs } from "../../store/modules/songs";
+import { useAppDispatch } from "../../store";
 
 export default function PlaylistSongsPage() {
   const params = useParams();
+  const dispatch = useAppDispatch();
+
   const [playlistData, setPlaylistData] = useState<IPlaylist | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -23,7 +27,9 @@ export default function PlaylistSongsPage() {
 
   const playlistSongs = playlistData
     ? playlistData.songs.map((song) => {
-        const songWithMoreItems = song as ISong & { moreItems: ReactElement };
+        const songWithMoreItems = { ...song } as ISong & {
+          moreItems: ReactElement;
+        };
         songWithMoreItems.moreItems = (
           //params.id is defined, because PlaylistPage only shows if params are '/playlists/id'
           <PlaylistRemoveItem
@@ -40,7 +46,10 @@ export default function PlaylistSongsPage() {
     setIsLoading(true);
     api
       .get(`playlists/${params.id}`)
-      .then((res: AxiosResponse<IPlaylist>) => setPlaylistData(res.data))
+      .then((res: AxiosResponse<IPlaylist>) => {
+        setPlaylistData(res.data);
+        dispatch(setTempSongs(res.data.songs));
+      })
       .finally(() => setIsLoading(false));
   }, []);
 

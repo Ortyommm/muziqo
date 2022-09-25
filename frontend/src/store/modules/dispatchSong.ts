@@ -10,12 +10,12 @@ import { ISong } from "../../types/SongsTypes";
 import { ISongsState, setCurrentSongsSource, setShuffledSongs } from "./songs";
 
 function getCurrentSongsByLocation() {
-  if (
-    window.location.pathname === "/discover" ||
-    window.location.pathname.startsWith("/users/")
-  )
-    return "temp";
-  return "favorites";
+  if (window.location.pathname === "/") return "favorites";
+  // if (
+  //   window.location.pathname === "/discover" ||
+  //   window.location.pathname.startsWith("/users/")
+  // )
+  return "temp";
 }
 
 async function changeSong(
