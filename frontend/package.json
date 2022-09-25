@@ -32,7 +32,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:256": "react-scripts --max_old_space_size=256 build",
+    "build:lowram": "react-scripts --max_old_space_size=1024 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
