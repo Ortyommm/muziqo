@@ -45,6 +45,7 @@ const Discover = () => {
   function onSearch(
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) {
+    setCurrentPage(0);
     setSearchText(event.target.value);
     clearTimeout(searchTimeout);
     setIsLoading(true);
