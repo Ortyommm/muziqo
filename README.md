@@ -1,4 +1,4 @@
-#Muziqo
+# Muziqo
 <hr>
 Muziqo is an open-source self-hosted music listening service. Users can upload songs and listen to them.
 
@@ -14,8 +14,8 @@ Backend:
 - TypeORM
 - PostgreSQL
 
-##Setup
-####Backend
+## Setup
+#### Backend
 1. cd backend/
 2. create .env file like in the example (you should also create database)
 3. install dependencies (`yarn` or `npm i`)
@@ -24,7 +24,7 @@ Backend:
 
 You can use pm2 for daemonizing.
 
-####Frontend
+#### Frontend
 1. cd frontend/
 2. create .env file like in the example
 3. install dependencies (`yarn` or `npm i`)
