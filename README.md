@@ -1,5 +1,4 @@
 # Muziqo
-<hr>
 Muziqo is an open-source self-hosted music listening service. Users can upload songs and listen to them.
 
 
