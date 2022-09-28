@@ -21,20 +21,9 @@ import {
 } from "../../store/modules/dispatchSong";
 import ShuffleAndRepeat from "./components/ShuffleAndRepeat";
 import PrevPlayNext from "./components/PrevPlayNext";
+import SongDurationSlider from "./components/SongDurationSlider";
 
 export default function PlayControls() {
-  const dispatch = useAppDispatch();
-
-  const currentTime = useAppSelector((state) => state.audio.currentTime);
-  const duration = useAppSelector((state) => state.audio.duration);
-  const currentTimePercent = duration ? (currentTime / duration) * 100 : 0;
-
-  function onCurrentTimeChange(event: Event, value: number | number[]) {
-    if (Array.isArray(value) || !duration) return;
-
-    dispatch(setCurrentTimeBySlider((duration / 100) * value));
-  }
-
   return (
     <Grid xs={6} container item alignItems="center">
       <Grid
@@ -46,7 +35,7 @@ export default function PlayControls() {
         <ShuffleAndRepeat />
       </Grid>
       <Grid item xs={12} md={5}>
-        <Slider value={currentTimePercent} onChange={onCurrentTimeChange} />
+        <SongDurationSlider />
       </Grid>
       <Grid
         xs={4.5}

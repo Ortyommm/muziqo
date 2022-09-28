@@ -11,6 +11,7 @@ import {
 } from "../../../store/modules/dispatchSong";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { toggle } from "../../../store/modules/audio";
+import { useEffect } from "react";
 
 export default function PrevPlayNext() {
   const dispatch = useAppDispatch();
@@ -44,6 +45,16 @@ export default function PrevPlayNext() {
       dispatch
     );
   }
+
+  useEffect(() => {
+    function onKeyPress(event: KeyboardEvent) {
+      event.preventDefault();
+      if (event.code === "Space") onSongToggle();
+    }
+
+    document.addEventListener("keyup", onKeyPress);
+    return () => document.removeEventListener("keyup", onKeyPress);
+  }, []);
 
   return (
     <>
