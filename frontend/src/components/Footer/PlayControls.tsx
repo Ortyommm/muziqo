@@ -22,19 +22,18 @@ import {
 import ShuffleAndRepeat from "./components/ShuffleAndRepeat";
 import PrevPlayNext from "./components/PrevPlayNext";
 import SongDurationSlider from "./components/SongDurationSlider";
+import FavoriteSongIcon from "../FavoriteSongIcon/FavoriteSongIcon";
 
 export default function PlayControls() {
+  const currentSongId = useAppSelector((state) => state.audio.currentSongId);
+
   return (
     <Grid xs={6} container item alignItems="center">
-      <Grid
-        container
-        item
-        xs={2.5}
-        sx={{ display: { xs: "none", md: "flex" } }}
-      >
+      <Grid container item xs={3.5} sx={{ display: "flex" }}>
         <ShuffleAndRepeat />
+        {currentSongId && <FavoriteSongIcon songId={currentSongId} />}
       </Grid>
-      <Grid item xs={12} md={5}>
+      <Grid item xs={4}>
         <SongDurationSlider />
       </Grid>
       <Grid
@@ -42,7 +41,7 @@ export default function PlayControls() {
         container
         item
         justifyContent="flex-end"
-        sx={{ display: { xs: "none", md: "flex" } }}
+        sx={{ display: "flex" }}
       >
         <PrevPlayNext />
       </Grid>

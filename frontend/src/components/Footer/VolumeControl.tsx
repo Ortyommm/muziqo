@@ -21,7 +21,7 @@ export default function VolumeControl() {
         item
         spacing={2}
         alignItems="center"
-        sx={{ mr: 3, display: { xs: "none", md: "flex" } }}
+        sx={{ mr: 3, display: "flex" }}
       >
         <Grid item>
           <VolumeUp />

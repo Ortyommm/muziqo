@@ -24,7 +24,7 @@ export default function Footer() {
         bottom: 0,
         left: 0,
         right: 0,
-        height: { xs: 150, md: 64 },
+        height: { xs: 150, sm: 64 },
         elevation: 3,
         display: "flex",
       }}

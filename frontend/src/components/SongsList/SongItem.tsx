@@ -21,7 +21,7 @@ import { changeSong } from "../../store/modules/dispatchSong";
 import { pause, play } from "../../store/modules/audio";
 import PlaylistsDialog from "../Playlists/PlaylistsDialog";
 import React, { ReactElement, useState } from "react";
-import { useLocation } from "react-router-dom";
+import FavoriteSongIcon from "../FavoriteSongIcon/FavoriteSongIcon";
 
 export default function SongItem({
   name,
@@ -47,12 +47,6 @@ export default function SongItem({
 
   const [openPlaylistDialog, setOpenPlaylistDialog] = useState(false);
 
-  const isFavorite = useAppSelector((state) => state.songs.favorites).some(
-    (favSong) => {
-      return favSong.id === id;
-    }
-  );
-
   // console.log(isFavorite);
   async function onAudioClick() {
     if (id !== currentSongId) {
@@ -65,10 +59,6 @@ export default function SongItem({
     } else {
       dispatch(play());
     }
-  }
-
-  function onFavoriteClick() {
-    dispatch(isFavorite ? removeFavorite(id) : addFavorite(id));
   }
 
   function onPlaylistClick() {
@@ -119,9 +109,7 @@ export default function SongItem({
               </MenuItem>
               {moreItems}
             </Menu>
-            <IconButton aria-label="comments" onClick={onFavoriteClick}>
-              {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            </IconButton>
+            <FavoriteSongIcon songId={id} />
           </Box>
         }
       >
