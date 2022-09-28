@@ -11,7 +11,7 @@ export default function MobileFooter() {
 
   return (
     <>
-      <Box sx={{ mt: 1 }}>
+      <Box sx={{ mt: 1, height: 42 }}>
         <SongsData />
       </Box>
       <Grid container justifyContent="center">

@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../index";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";
 import { shuffle } from "lodash-es";
+import { getAllSongs } from "./dispatchSong";
 
 export interface ISongsState {
   // discover: ISong[];
@@ -68,7 +69,9 @@ export const setCurrentSongsSource =
 export const addFavorite =
   (songId: number) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const song = getState().songs.temp.find((song) => song.id === songId);
+    const song = getAllSongs(getState().songs).find(
+      (song) => song.id === songId
+    );
     if (song) {
       api.post("users/favorite", { songId });
       dispatch(setFavorites([...getState().songs.favorites, song]));
@@ -78,7 +81,9 @@ export const addFavorite =
 export const removeFavorite =
   (songId: number) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const song = getState().songs.temp.find((song) => song.id === songId);
+    const song = getAllSongs(getState().songs).find(
+      (song) => song.id === songId
+    );
     if (song) {
       api.delete("users/favorite", { data: { songId } });
       dispatch(
