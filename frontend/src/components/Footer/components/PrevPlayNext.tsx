@@ -48,8 +48,15 @@ export default function PrevPlayNext() {
 
   useEffect(() => {
     function onKeyPress(event: KeyboardEvent) {
-      event.preventDefault();
-      if (event.code === "Space") onSongToggle();
+      if (
+        event.code === "Space" &&
+        !["input", "textarea"].includes(
+          (event.target as HTMLElement).tagName.toLowerCase()
+        )
+      ) {
+        event.preventDefault();
+        onSongToggle();
+      }
     }
 
     document.addEventListener("keyup", onKeyPress);
