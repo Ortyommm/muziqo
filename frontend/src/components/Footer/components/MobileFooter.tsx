@@ -20,14 +20,10 @@ export default function MobileFooter() {
         </Grid>
       </Grid>
       <Grid container alignItems="center">
-        <Grid
-          item
-          container
-          alignItems="center"
-          justifyContent="center"
-          xs={3.5}
-        >
-          {currentSongId && <FavoriteSongIcon songId={currentSongId} />}
+        <Grid item container alignItems="center" xs={3.5}>
+          <Box sx={{ ml: 2 }}>
+            {currentSongId && <FavoriteSongIcon songId={currentSongId} />}
+          </Box>
         </Grid>
         <Grid item container alignItems="center" justifyContent="center" xs={5}>
           <PrevPlayNext />
