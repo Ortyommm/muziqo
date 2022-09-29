@@ -51,7 +51,7 @@ export default function PrevPlayNext() {
       if (
         event.code === "Space" &&
         !["input", "textarea"].includes(
-          (event.target as HTMLElement).tagName.toLowerCase()
+          (event.target as HTMLElement)?.tagName.toLowerCase()
         )
       ) {
         event.preventDefault();
