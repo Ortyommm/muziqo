@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlaylistEntity } from './entities/playlist.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UsersService } from '../users/users.service';
 import { AddOrDeleteSongToPlaylistDto } from './dto/add-song-to-playlist.dto';
 import { SongsService } from '../songs/songs.service';
+import { DeletePlaylistDto } from './dto/delete-playlist.dto';
 
 @Injectable()
 export class PlaylistsService {
@@ -48,7 +49,7 @@ export class PlaylistsService {
   findById(id: number) {
     return this.playlists.findOne({
       where: { id },
-      relations: ['user', 'songs'],
+      relations: ['user', 'songs', 'songs.authors'],
     });
   }
 
@@ -81,5 +82,18 @@ export class PlaylistsService {
 
     playlist.songs = playlist.songs.filter((song) => song.id !== dto.songId);
     return this.playlists.save(playlist);
+  }
+
+  async deletePlaylist(dto: DeletePlaylistDto) {
+    const playlist = await this.playlists.findOne({
+      where: { id: dto.playlistId },
+    });
+
+    if (!playlist) {
+      throw new HttpException('playlist_not_found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.playlists.remove(playlist);
+    return { message: 'success' };
   }
 }

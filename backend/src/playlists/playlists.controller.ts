@@ -13,6 +13,7 @@ import { PlaylistsService } from './playlists.service';
 import { IAuthorizedUserRequest } from '../auth/types';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { AddOrDeleteSongToPlaylistDto } from './dto/add-song-to-playlist.dto';
+import { DeletePlaylistDto } from './dto/delete-playlist.dto';
 
 @Controller('playlists')
 export class PlaylistsController {
@@ -58,5 +59,11 @@ export class PlaylistsController {
   @UseGuards(JwtAuthGuard)
   findById(@Param('id') id) {
     return this.playlistsService.findById(+id);
+  }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  deletePlaylist(@Body() dto: DeletePlaylistDto) {
+    return this.playlistsService.deletePlaylist(dto);
   }
 }

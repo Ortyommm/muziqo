@@ -1,5 +1,12 @@
 import { useParams } from "react-router-dom";
-import { Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";
@@ -9,6 +16,7 @@ import { ISong } from "../../types/SongsTypes";
 import PlaylistRemoveItem from "./components/PlaylistRemoveItem";
 import { setTempSongs } from "../../store/modules/songs";
 import { useAppDispatch } from "../../store";
+import RemovePlaylistDialog from "./components/RemovePlaylistDialog";
 
 export default function PlaylistSongsPage() {
   const params = useParams();
@@ -16,6 +24,10 @@ export default function PlaylistSongsPage() {
 
   const [playlistData, setPlaylistData] = useState<IPlaylist | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [removeDialogOpen, setRemoveDialogOpen] = useState<boolean>(false);
+  const closeRemoveDialog = () => setRemoveDialogOpen(false);
+  const openRemoveDialog = () => setRemoveDialogOpen(true);
 
   function onSongRemove(songId: number) {
     if (!playlistData) return;
@@ -58,6 +70,17 @@ export default function PlaylistSongsPage() {
       <Typography variant="h4" mb={2}>
         {!isLoading ? `Playlist: ${playlistData?.name}` : ""}
       </Typography>
+      <Box sx={{ mb: 1, mt: 1 }}>
+        <Button variant="outlined" color="error" onClick={openRemoveDialog}>
+          Delete playlist
+        </Button>
+        <RemovePlaylistDialog
+          open={removeDialogOpen}
+          onClose={closeRemoveDialog}
+          //we can go to this page only if params contains id
+          playlistId={+params.id!}
+        />
+      </Box>
       <SongsList songs={playlistSongs} isFetching={isLoading} />
     </Container>
   );
