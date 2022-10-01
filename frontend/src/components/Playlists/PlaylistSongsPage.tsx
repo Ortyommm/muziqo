@@ -15,17 +15,20 @@ import SongsList from "../SongsList/SongsList";
 import { ISong } from "../../types/SongsTypes";
 import PlaylistRemoveItem from "./components/PlaylistRemoveItem";
 import { setTempSongs } from "../../store/modules/songs";
-import { useAppDispatch } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import RemovePlaylistDialog from "./components/RemovePlaylistDialog";
 
 export default function PlaylistSongsPage() {
   const params = useParams();
   const dispatch = useAppDispatch();
 
+  const userId = useAppSelector((state) => state.auth.authorizedUser?.id);
   const [playlistData, setPlaylistData] = useState<IPlaylist | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [removeDialogOpen, setRemoveDialogOpen] = useState<boolean>(false);
+  const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+  const ownPlaylist = playlistData?.user.id === userId;
+
   const closeRemoveDialog = () => setRemoveDialogOpen(false);
   const openRemoveDialog = () => setRemoveDialogOpen(true);
 
@@ -71,9 +74,11 @@ export default function PlaylistSongsPage() {
         {!isLoading ? `Playlist: ${playlistData?.name}` : ""}
       </Typography>
       <Box sx={{ mb: 1, mt: 1 }}>
-        <Button variant="outlined" color="error" onClick={openRemoveDialog}>
-          Delete playlist
-        </Button>
+        {ownPlaylist && (
+          <Button variant="outlined" color="error" onClick={openRemoveDialog}>
+            Delete playlist
+          </Button>
+        )}
         <RemovePlaylistDialog
           open={removeDialogOpen}
           onClose={closeRemoveDialog}
