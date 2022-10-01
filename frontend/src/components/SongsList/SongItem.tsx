@@ -119,7 +119,8 @@ export default function SongItem({
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
+            alignItems: "left",
             width: { xs: "63%", sm: "79%" },
           }}
         >
@@ -134,13 +135,12 @@ export default function SongItem({
               whiteSpace: "nowrap",
             }}
           >
-            {name}{" "}
-            <Box
-              component="span"
-              sx={{ display: { sm: "none", xs: "none", md: "inline" } }}
-            >
-              {authors?.[0] && "|"}
-            </Box>
+            {name} {/*<Box*/}
+            {/*  component="span"*/}
+            {/*  sx={{ display: { sm: "none", xs: "none", md: "inline" } }}*/}
+            {/*>*/}
+            {/*  {authors?.[0] && "|"}*/}
+            {/*</Box>*/}
           </Typography>
           <Typography
             sx={{
