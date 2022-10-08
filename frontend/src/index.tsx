@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "./App.css";
 
 const root = ReactDOM.createRoot(
@@ -30,6 +31,8 @@ root.render(
   </Provider>
   // </React.StrictMode>
 );
+
+serviceWorkerRegistration.register();
 
 //Prevent scrolling on space click
 window.addEventListener("keydown", (e) => {

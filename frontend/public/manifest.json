@@ -1,12 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Muziqo",
+  "name": "Muziqo",
   "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
     {
       "src": "logo192.png",
       "type": "image/png",
@@ -16,6 +11,12 @@
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "maskable_icon.png",
+      "type": "image/png",
+      "sizes": "640x640",
+      "purpose": "maskable"
     }
   ],
   "start_url": ".",
