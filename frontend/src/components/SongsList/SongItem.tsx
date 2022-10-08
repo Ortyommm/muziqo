@@ -66,7 +66,7 @@ export default function SongItem({
 
   async function onMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
-    setIsCached(!!(await caches.match(fileUrl)));
+    setIsCached(!!(await window.caches.match(fileUrl)));
     // console.log(isCached);
   }
 
@@ -78,7 +78,7 @@ export default function SongItem({
   async function cacheSong() {
     //prevent multiple clicks until previous request hasn't ended
     if (isCaching) return;
-    const cache = await caches.open("songs");
+    const cache = await window.caches.open("songs");
 
     isCaching = true;
     await (isCached ? cache.delete(fileUrl) : cache.add(fileUrl));
