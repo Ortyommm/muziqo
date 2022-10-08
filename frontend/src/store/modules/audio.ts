@@ -191,11 +191,11 @@ export const fetchFileAndGetUrl =
       process.env.REACT_APP_API_URL +
       audioSrc; /*await rawFetchFileAndGetUrl(audioSrc);*/
 
-    /*const cache = await caches.open("songs");
+    const cache = await caches.open("songs");
     const cachedSong = await cache.match(audioFileSrc);
     if (cachedSong) {
       audioFileSrc = window.URL.createObjectURL(await cachedSong.blob());
-    }*/
+    }
 
     dispatch(setAudioControllerSrc(audioFileSrc));
   };
