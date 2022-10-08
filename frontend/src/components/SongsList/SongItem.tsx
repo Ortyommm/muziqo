@@ -66,7 +66,7 @@ export default function SongItem({
 
   async function onMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
-    setIsCached(!!(await window.caches.match(fileUrl)));
+    if (window.caches) setIsCached(!!(await window.caches.match(fileUrl)));
     // console.log(isCached);
   }
 
@@ -116,9 +116,11 @@ export default function SongItem({
               <MenuItem onClick={onPlaylistClick}>
                 <PlaylistAddIcon />
               </MenuItem>
-              <MenuItem onClick={cacheSong}>
-                {isCached ? <CachedIcon /> : <CloudDownloadIcon />}
-              </MenuItem>
+              {window.caches ? (
+                <MenuItem onClick={cacheSong}>
+                  {isCached ? <CachedIcon /> : <CloudDownloadIcon />}
+                </MenuItem>
+              ) : null}
               {moreItems}
             </Menu>
             <FavoriteSongIcon songId={id} />
