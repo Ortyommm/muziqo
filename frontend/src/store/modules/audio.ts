@@ -187,11 +187,17 @@ export const toggleShuffle =
 export const fetchFileAndGetUrl =
   (audioSrc: string) => async (dispatch: AppDispatch) => {
     // dispatch(pause());
-    const audioFileSrc =
+    let audioFileSrc =
       process.env.REACT_APP_API_URL +
       audioSrc; /*await rawFetchFileAndGetUrl(audioSrc);*/
+
+    /*const cache = await caches.open("songs");
+    const cachedSong = await cache.match(audioFileSrc);
+    if (cachedSong) {
+      audioFileSrc = window.URL.createObjectURL(await cachedSong.blob());
+    }*/
+
     dispatch(setAudioControllerSrc(audioFileSrc));
-    // dispatch(play());
   };
 
 export default audioSlice.reducer;

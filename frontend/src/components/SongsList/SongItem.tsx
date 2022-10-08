@@ -1,21 +1,13 @@
-import {
-  Box,
-  IconButton,
-  ListItem,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CachedIcon from "@mui/icons-material/Cached";
 import { durationConverter } from "../../utils/durationConverter";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { ISong } from "../../types/SongsTypes";
-import { addFavorite, removeFavorite } from "../../store/modules/songs";
 import AppListItem from "../AppList/AppListItem";
 import { changeSong } from "../../store/modules/dispatchSong";
 import { pause, play } from "../../store/modules/audio";
@@ -36,11 +28,14 @@ export default function SongItem({
   style?: React.CSSProperties;
 }) {
   const dispatch = useAppDispatch();
+  const fileUrl = process.env.REACT_APP_API_URL + file;
 
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);
   const isCurrent = currentSongId === id;
   const isPlaying = useAppSelector((state) => state.audio.isPlaying);
   const currentTime = useAppSelector((state) => state.audio.currentTime);
+
+  const [isCached, setIsCached] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const moreOpen = Boolean(anchorEl);
@@ -69,12 +64,26 @@ export default function SongItem({
     setOpenPlaylistDialog(false);
   }
 
-  function onMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
+  async function onMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
+    setIsCached(!!(await caches.match(fileUrl)));
+    // console.log(isCached);
   }
 
   function onMoreClose() {
     setAnchorEl(null);
+  }
+
+  let isCaching = false;
+  async function cacheSong() {
+    //prevent multiple clicks until previous request hasn't ended
+    if (isCaching) return;
+    const cache = await caches.open("songs");
+
+    isCaching = true;
+    await (isCached ? cache.delete(fileUrl) : cache.add(fileUrl));
+    setIsCached(!isCached);
+    isCaching = false;
   }
 
   return (
@@ -106,6 +115,9 @@ export default function SongItem({
             <Menu open={moreOpen} onClose={onMoreClose} anchorEl={anchorEl}>
               <MenuItem onClick={onPlaylistClick}>
                 <PlaylistAddIcon />
+              </MenuItem>
+              <MenuItem onClick={cacheSong}>
+                {isCached ? <CachedIcon /> : <CloudDownloadIcon />}
               </MenuItem>
               {moreItems}
             </Menu>
@@ -146,7 +158,7 @@ export default function SongItem({
             sx={{
               color: (theme) => theme.palette.text.secondary,
               fontSize: 11,
-              display: { md: "block", sm: "none", xs: "none" },
+              // display: { md: "block", sm: "none", xs: "none" },
             }}
           >
             {/*TODO many authors*/}
