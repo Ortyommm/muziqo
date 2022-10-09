@@ -32,6 +32,7 @@ const songsSlice = createSlice({
     setFavorites(state, action: PayloadAction<ISong[]>) {
       state.favorites = action.payload;
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
+      addFavoritesToCache(state.favorites);
     },
     // setDiscoverSongs(state, action: PayloadAction<ISong[]>) {
     //   state.discover = action.payload;
@@ -67,10 +68,20 @@ export const setCurrentSongsSource =
     dispatch(setShuffledSongs([...shuffle(songsWithoutCurrent), currentSong!]));
   };
 
-async function addSongToCache(fileUrl: string) {
-  if (!window.caches) return;
-  const cache = await window.caches.open("songs");
-  return cache.add(fileUrl);
+async function addFavoritesToCache(favorites: ISong[]) {
+  if (window.caches) {
+    const cache = await window.caches.open("songs");
+    for (const song of favorites) {
+      const songUrl = process.env.REACT_APP_API_URL + song.file;
+
+      if (!(await cache.match(songUrl)))
+        try {
+          await cache.add(songUrl);
+        } catch (error: any) {
+          if (error?.name === "QuotaExceededError") break;
+        }
+    }
+  }
 }
 
 async function removeSongFromCache(fileUrl: string) {
@@ -88,7 +99,6 @@ export const addFavorite =
     if (song) {
       api.post("users/favorite", { songId });
       dispatch(setFavorites([...getState().songs.favorites, song]));
-      addSongToCache(process.env.REACT_APP_API_URL + song.file);
     }
   };
 
