@@ -23,6 +23,7 @@ import { setSearchUsers } from "../../store/modules/users";
 import { IUser } from "../../types/UserTypes";
 import UsersList from "../UsersList/components/UsersList";
 import AddSongOrAuthor from "./AddSongOrAuthor";
+import { isError } from "lodash-es";
 
 const Discover = () => {
   const dispatch = useAppDispatch();
@@ -57,6 +58,7 @@ const Discover = () => {
           })
           .then((res: AxiosResponse<ISong[]>) => {
             dispatch(setTempSongs(res.data));
+            console.log(res.data);
             setIsLoading(false);
           });
       }, 300)
@@ -68,6 +70,7 @@ const Discover = () => {
     api
       .get(searchItem, { params: { page: currentPage } })
       .then((res: AxiosResponse<ISong[] | IUser[]>) => {
+        if (isError(res)) throw res;
         switch (searchItem) {
           case "songs": {
             dispatch(
@@ -85,6 +88,11 @@ const Discover = () => {
             break;
           }
         }
+      })
+      .catch((err) => {
+        if (err.code === "ERR_NETWORK") {
+          console.log("err", err);
+        } /*setError()*/
       })
       .finally(() => {
         setIsLoading(false);

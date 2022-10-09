@@ -1,9 +1,10 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IconButton } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { addFavorite, removeFavorite } from "../../store/modules/songs";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { getAllSongs } from "../../store/modules/dispatchSong";
 
 export default function ({ songId }: { songId: number }) {
   const dispatch = useAppDispatch();

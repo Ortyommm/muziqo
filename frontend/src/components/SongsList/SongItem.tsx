@@ -35,8 +35,6 @@ export default function SongItem({
   const isPlaying = useAppSelector((state) => state.audio.isPlaying);
   const currentTime = useAppSelector((state) => state.audio.currentTime);
 
-  const [isCached, setIsCached] = useState(false);
-
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const moreOpen = Boolean(anchorEl);
 
@@ -66,24 +64,11 @@ export default function SongItem({
 
   async function onMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
-    if (window.caches) setIsCached(!!(await window.caches.match(fileUrl)));
-    // console.log(isCached);
+    // if (window.caches) setIsCached(!!(await window.caches.match(fileUrl)));
   }
 
   function onMoreClose() {
     setAnchorEl(null);
-  }
-
-  let isCaching = false;
-  async function cacheSong() {
-    //prevent multiple clicks until previous request hasn't ended
-    if (isCaching) return;
-    const cache = await window.caches.open("songs");
-
-    isCaching = true;
-    await (isCached ? cache.delete(fileUrl) : cache.add(fileUrl));
-    setIsCached(!isCached);
-    isCaching = false;
   }
 
   return (
@@ -116,11 +101,11 @@ export default function SongItem({
               <MenuItem onClick={onPlaylistClick}>
                 <PlaylistAddIcon />
               </MenuItem>
-              {window.caches ? (
-                <MenuItem onClick={cacheSong}>
-                  {isCached ? <CachedIcon /> : <CloudDownloadIcon />}
-                </MenuItem>
-              ) : null}
+              {/*{window.caches ? (*/}
+              {/*  <MenuItem onClick={cacheSong}>*/}
+              {/*    {isCached ? <CachedIcon /> : <CloudDownloadIcon />}*/}
+              {/*  </MenuItem>*/}
+              {/*) : null}*/}
               {moreItems}
             </Menu>
             <FavoriteSongIcon songId={id} />

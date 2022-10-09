@@ -19,7 +19,7 @@ export type SongsSources = /*"discover"*/ "favorites" | "temp";
 
 const initialState: ISongsState = {
   // discover: [],
-  favorites: [],
+  favorites: JSON.parse(localStorage.getItem("favorites") || "[]"),
   temp: [],
   currentSongsSource: "favorites",
   shuffled: [],
@@ -31,6 +31,7 @@ const songsSlice = createSlice({
   reducers: {
     setFavorites(state, action: PayloadAction<ISong[]>) {
       state.favorites = action.payload;
+      localStorage.setItem("favorites", JSON.stringify(state.favorites));
     },
     // setDiscoverSongs(state, action: PayloadAction<ISong[]>) {
     //   state.discover = action.payload;
@@ -66,6 +67,18 @@ export const setCurrentSongsSource =
     dispatch(setShuffledSongs([...shuffle(songsWithoutCurrent), currentSong!]));
   };
 
+async function addSongToCache(fileUrl: string) {
+  if (!window.caches) return;
+  const cache = await window.caches.open("songs");
+  return cache.add(fileUrl);
+}
+
+async function removeSongFromCache(fileUrl: string) {
+  if (!window.caches) return;
+  const cache = await window.caches.open("songs");
+  return cache.delete(fileUrl);
+}
+
 export const addFavorite =
   (songId: number) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -75,6 +88,7 @@ export const addFavorite =
     if (song) {
       api.post("users/favorite", { songId });
       dispatch(setFavorites([...getState().songs.favorites, song]));
+      addSongToCache(process.env.REACT_APP_API_URL + song.file);
     }
   };
 
@@ -91,6 +105,7 @@ export const removeFavorite =
           getState().songs.favorites.filter((song) => song.id !== songId)
         )
       );
+      removeSongFromCache(process.env.REACT_APP_API_URL + song.file);
     }
   };
 

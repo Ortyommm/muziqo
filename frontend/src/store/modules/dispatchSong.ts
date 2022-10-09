@@ -102,6 +102,7 @@ function playNextSongInShuffled() {
 }
 
 function getAllSongsExceptFavorites(state: ISongsState) {
+  // console.log(state.temp);
   return [...state.temp /*...state.discover*/];
 }
 
