@@ -8,6 +8,7 @@ import {
 import { AppDispatch, store } from "../index";
 import { ISong } from "../../types/SongsTypes";
 import { ISongsState, setCurrentSongsSource, setShuffledSongs } from "./songs";
+import { isSafari } from "../../utils/isSafari";
 
 function getCurrentSongsByLocation() {
   if (window.location.pathname === "/") return "favorites";
@@ -34,14 +35,20 @@ function changeSong(
   dispatch: AppDispatch
 ) {
   dispatch(pause());
-  //TODO then
-  dispatch(fetchFileAndGetUrl(file)).then(() => {
+  const setSongData = () => {
     dispatch(setCurrentSongId(id));
     dispatch(setDuration(+duration));
     if (changeSource)
       dispatch(setCurrentSongsSource(getCurrentSongsByLocation()));
     dispatch(play());
-  });
+  };
+  //can't use async in safari
+  if (isSafari()) {
+    dispatch(fetchFileAndGetUrl(file));
+    setSongData();
+  } else {
+    dispatch(fetchFileAndGetUrl(file)).then(setSongData);
+  }
 }
 
 function getNextSong(songs: ISong[], currentSongId: number | null) {

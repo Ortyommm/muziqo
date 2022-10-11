@@ -15,6 +15,7 @@ import {
 } from "./dispatchSong";
 import { shuffle } from "lodash-es";
 import { setShuffledSongs } from "./songs";
+import { isSafari } from "../../utils/isSafari";
 
 const initialVolume = +(localStorage.getItem("volume") || 1);
 const audioController = new Audio();
@@ -191,7 +192,8 @@ export const fetchFileAndGetUrl =
       process.env.REACT_APP_API_URL +
       audioSrc; /*await rawFetchFileAndGetUrl(audioSrc);*/
 
-    if (window.caches) {
+    //can't use async in safari
+    if (window.caches && !isSafari()) {
       const cache = await window.caches.open("songs");
       const cachedSong = await cache.match(audioFileSrc);
       if (cachedSong) {
