@@ -41,7 +41,7 @@ export default function SongItem({
   const [openPlaylistDialog, setOpenPlaylistDialog] = useState(false);
 
   // console.log(isFavorite);
-  async function onAudioClick(event: any) {
+  function onAudioClick() {
     if (id !== currentSongId) {
       changeSong({ file, id, duration }, dispatch);
       return;
