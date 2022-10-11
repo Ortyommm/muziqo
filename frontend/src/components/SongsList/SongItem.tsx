@@ -112,11 +112,7 @@ export default function SongItem({
           </Box>
         }
       >
-        <IconButton
-          sx={{ mr: 2 }}
-          onClick={onAudioClick}
-          onTouchStart={onAudioClick}
-        >
+        <IconButton sx={{ mr: 2 }} onClick={onAudioClick}>
           {isCurrent && isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
         <Box
