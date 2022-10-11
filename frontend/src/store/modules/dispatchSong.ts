@@ -18,7 +18,7 @@ function getCurrentSongsByLocation() {
   return "temp";
 }
 
-async function changeSong(
+function changeSong(
   {
     //audio file src
     file,
@@ -34,7 +34,7 @@ async function changeSong(
   dispatch: AppDispatch
 ) {
   dispatch(pause());
-  await dispatch(fetchFileAndGetUrl(file));
+  dispatch(fetchFileAndGetUrl(file));
   dispatch(setCurrentSongId(id));
   dispatch(setDuration(+duration));
   if (changeSource)
