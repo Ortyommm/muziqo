@@ -112,7 +112,7 @@ const audioSlice = createSlice({
     },
     play(state: IAudioState) {
       if (!state.currentSongId) return;
-      audioController.play();
+      // audioController.play();
       state.isPlaying = true;
     },
     toggle(state) {
