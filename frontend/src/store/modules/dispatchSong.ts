@@ -34,12 +34,14 @@ function changeSong(
   dispatch: AppDispatch
 ) {
   dispatch(pause());
-  dispatch(fetchFileAndGetUrl(file));
-  dispatch(setCurrentSongId(id));
-  dispatch(setDuration(+duration));
-  if (changeSource)
-    dispatch(setCurrentSongsSource(getCurrentSongsByLocation()));
-  dispatch(play());
+  //TODO then
+  dispatch(fetchFileAndGetUrl(file)).then(() => {
+    dispatch(setCurrentSongId(id));
+    dispatch(setDuration(+duration));
+    if (changeSource)
+      dispatch(setCurrentSongsSource(getCurrentSongsByLocation()));
+    dispatch(play());
+  });
 }
 
 function getNextSong(songs: ISong[], currentSongId: number | null) {
