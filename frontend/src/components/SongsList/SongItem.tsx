@@ -41,7 +41,7 @@ export default function SongItem({
   const [openPlaylistDialog, setOpenPlaylistDialog] = useState(false);
 
   // console.log(isFavorite);
-  async function onAudioClick() {
+  async function onAudioClick(event: any) {
     if (id !== currentSongId) {
       changeSong({ file, id, duration }, dispatch);
       return;
@@ -112,7 +112,11 @@ export default function SongItem({
           </Box>
         }
       >
-        <IconButton sx={{ mr: 2 }} onClickCapture={onAudioClick}>
+        <IconButton
+          sx={{ mr: 2 }}
+          onClick={onAudioClick}
+          onTouchStart={onAudioClick}
+        >
           {isCurrent && isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
         <Box

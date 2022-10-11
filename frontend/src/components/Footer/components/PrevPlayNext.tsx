@@ -65,13 +65,13 @@ export default function PrevPlayNext() {
 
   return (
     <>
-      <IconButton onClickCapture={onPrevClick} size="small">
+      <IconButton onClick={onPrevClick} size="small">
         <SkipPreviousIcon />
       </IconButton>
-      <Button variant="outlined" onClickCapture={onSongToggle} size="small">
+      <Button variant="outlined" onClick={onSongToggle} size="small">
         {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
       </Button>
-      <IconButton onClickCapture={onNextClick} size="small">
+      <IconButton onClick={onNextClick} size="small">
         <SkipNextIcon />
       </IconButton>
     </>
