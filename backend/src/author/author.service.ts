@@ -16,7 +16,7 @@ export class AuthorService {
   ) {}
 
   findAll(fetchSongs: string | boolean, page: number, name?: string) {
-    const authorsLimit = 15;
+    const authorsLimit = 50;
 
     const relations = ['songs'];
 
