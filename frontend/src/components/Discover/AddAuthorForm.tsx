@@ -30,7 +30,6 @@ export default function AddAuthorForm({ onClose }: { onClose: () => void }) {
           <SubmitButton />
         </Box>
       </DialogContent>
-      ;
     </>
   );
 }

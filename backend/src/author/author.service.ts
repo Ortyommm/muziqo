@@ -15,20 +15,24 @@ export class AuthorService {
     private readonly songsService: SongsService,
   ) {}
 
-  findAll(fetchSongs: string | boolean, name?: string) {
+  findAll(fetchSongs: string | boolean, page: number, name?: string) {
+    const authorsLimit = 15;
+
     const relations = ['songs'];
 
     const shouldFetchRelations = fetchSongs === true || fetchSongs === 'true';
 
-    if (!name)
-      return this.authors.find({
-        relations: shouldFetchRelations ? relations : undefined,
-      });
+    // if (!name)
+    //   return this.authors.find({
+    //     relations: shouldFetchRelations ? relations : undefined,
+    //   });
 
-    const authors = this.authors
-      .createQueryBuilder('author')
-      .select()
-      .where(`name ILIKE :name`, { name: `%${name}%` });
+    const authors = this.authors.createQueryBuilder('author').select();
+    if (name) authors.where(`name ILIKE :name`, { name: `%${name}%` });
+
+    authors.limit(authorsLimit).offset(authorsLimit * page);
+
+    // console.log(authors);
 
     if (shouldFetchRelations) authors.loadAllRelationIds({ relations });
     return authors.getMany();

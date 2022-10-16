@@ -3,20 +3,27 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { IUser } from "../../../types/UserTypes";
 import AppListItem from "../../AppList/AppListItem";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
-export default function UserItem(user: IUser) {
+export default function UserItem({
+  name,
+  id,
+  style,
+}: IUser & {
+  style?: React.CSSProperties;
+}) {
   const navigate = useNavigate();
 
   function onUserIconClick() {
-    navigate(`/users/${user.id}`);
+    navigate(`/users/${id}`);
   }
 
   return (
-    <AppListItem>
+    <AppListItem style={style}>
       <IconButton onClick={onUserIconClick}>
         <AccountCircleIcon />
       </IconButton>
-      <Typography>{user.name}</Typography>
+      <Typography>{name}</Typography>
     </AppListItem>
   );
 }

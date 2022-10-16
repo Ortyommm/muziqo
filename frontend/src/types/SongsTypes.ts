@@ -11,3 +11,7 @@ export interface IAuthor {
   id: number;
   name: string;
 }
+
+export interface IAuthorWithSongs extends IAuthor {
+  songs: ISong[];
+}

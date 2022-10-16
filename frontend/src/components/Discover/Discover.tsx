@@ -3,7 +3,7 @@ import SongsList from "../SongsList/SongsList";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";
-import { ISong } from "../../types/SongsTypes";
+import { IAuthor, ISong } from "../../types/SongsTypes";
 import { setTempSongs } from "../../store/modules/songs";
 import {
   Container,
@@ -24,6 +24,7 @@ import { IUser } from "../../types/UserTypes";
 import UsersList from "../UsersList/components/UsersList";
 import AddSongOrAuthor from "./AddSongOrAuthor";
 import { isError } from "lodash-es";
+import AuthorList from "../Authors/components/AuthorList";
 
 const Discover = () => {
   const dispatch = useAppDispatch();
@@ -36,12 +37,49 @@ const Discover = () => {
   const [isAllDataFetched, setIsAllDataFetched] = useState(false);
 
   const [searchTimeout, setSearchTimeout] = useState(0);
-  type SearchItems = "songs" | "users";
+  type SearchItems = "songs" | "users" | "author";
   const [searchItem, setSearchItem] = useState<SearchItems>("songs");
 
   const [currentPage, setCurrentPage] = useState(0);
 
-  //TODO authorSearch
+  const [authors, setAuthors] = useState<IAuthor[]>([]);
+
+  const getCurrentItems = (selectedSearchItem: string) => {
+    switch (selectedSearchItem) {
+      case "songs":
+        return tempSongs;
+      case "users":
+        return searchUsers;
+      case "author":
+      default:
+        return authors;
+    }
+  };
+
+  function setDataBySearchItem(data: ISong[] | IUser[]) {
+    switch (searchItem) {
+      case "songs": {
+        dispatch(
+          setTempSongs(
+            currentPage
+              ? [...tempSongs, ...(data as ISong[])]
+              : (data as ISong[])
+          )
+        );
+        break;
+      }
+      case "author":
+        setAuthors(data);
+        break;
+      case "users": {
+        //TODO user pagination
+        //TODO user search
+        dispatch(setSearchUsers(data as IUser[]));
+        break;
+      }
+    }
+    if (data.length < 50) setIsAllDataFetched(true);
+  }
 
   function onSearch(
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -53,14 +91,13 @@ const Discover = () => {
     setSearchTimeout(
       window.setTimeout(() => {
         api
-          .get("/songs", {
+          .get(searchItem, {
             params: { name: event.target.value, page: currentPage },
           })
           .then((res: AxiosResponse<ISong[]>) => {
-            dispatch(setTempSongs(res.data));
-            console.log(res.data);
-            setIsLoading(false);
-          });
+            setDataBySearchItem(res.data);
+          })
+          .finally(() => setIsLoading(false));
       }, 300)
     );
   }
@@ -71,23 +108,7 @@ const Discover = () => {
       .get(searchItem, { params: { page: currentPage } })
       .then((res: AxiosResponse<ISong[] | IUser[]>) => {
         if (isError(res)) throw res;
-        switch (searchItem) {
-          case "songs": {
-            dispatch(
-              setTempSongs(
-                currentPage
-                  ? [...tempSongs, ...(res.data as ISong[])]
-                  : (res.data as ISong[])
-              )
-            );
-            if (res.data.length < 50) setIsAllDataFetched(true);
-            break;
-          }
-          case "users": {
-            dispatch(setSearchUsers(res.data as IUser[]));
-            break;
-          }
-        }
+        setDataBySearchItem(res.data);
       })
       .catch((err) => {
         if (err.code === "ERR_NETWORK") {
@@ -100,15 +121,57 @@ const Discover = () => {
   }, [searchItem, currentPage]);
 
   function loadMoreItems(startIndex: number, stopIndex: number) {
+    // console.log("loadMoreItems");
+    let items: ISong[] | IAuthor[];
+    switch (searchItem) {
+      case "songs":
+        items = tempSongs;
+        break;
+      case "author":
+      default:
+        items = authors;
+        break;
+    }
     if (isAllDataFetched) return;
-    if (stopIndex > tempSongs.length * 0.8) setCurrentPage(currentPage + 1);
+
+    if (stopIndex > items.length * 0.8) {
+      setCurrentPage(currentPage + 1);
+      // console.log(items, stopIndex);
+    }
   }
 
   function onSearchItem(event: SelectChangeEvent) {
+    const selectedSearchItem = event.target.value as SearchItems;
     setCurrentPage(0);
-    setIsAllDataFetched(false);
-    setSearchItem(event.target.value as SearchItems);
+    setIsAllDataFetched(getCurrentItems(selectedSearchItem).length < 50);
+    setSearchText("");
+    setSearchItem(selectedSearchItem);
   }
+
+  const CurrentList = () => {
+    switch (searchItem) {
+      case "songs":
+        return (
+          <SongsList
+            songs={tempSongs}
+            isFetching={isLoading}
+            loadMoreItems={loadMoreItems}
+          />
+        );
+      case "users":
+        return <UsersList users={searchUsers} />;
+      case "author":
+        return (
+          <AuthorList
+            authors={authors}
+            isFetching={isLoading}
+            loadMoreItems={loadMoreItems}
+          />
+        );
+      default:
+        return <></>;
+    }
+  };
 
   return (
     <>
@@ -125,6 +188,7 @@ const Discover = () => {
               >
                 <MenuItem value="songs">Songs</MenuItem>
                 <MenuItem value="users">Users</MenuItem>
+                <MenuItem value="author">Authors</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -144,15 +208,7 @@ const Discover = () => {
             />
           </Grid>
         </Grid>
-        {searchItem === "songs" ? (
-          <SongsList
-            songs={tempSongs}
-            isFetching={isLoading}
-            loadMoreItems={loadMoreItems}
-          />
-        ) : (
-          <UsersList users={searchUsers} />
-        )}
+        <CurrentList />
       </Container>
       <AddSongOrAuthor />
     </>

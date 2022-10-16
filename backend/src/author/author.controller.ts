@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 
@@ -10,8 +10,14 @@ export class AuthorController {
   findAll(
     @Query('fetch_songs') fetchSongs: string,
     @Query('name') name?: string,
+    @Query('page') page?: string,
   ) {
-    return this.authorService.findAll(fetchSongs, name);
+    return this.authorService.findAll(fetchSongs, +page, name);
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.authorService.findById(true, +id);
   }
 
   @Post()

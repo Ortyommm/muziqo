@@ -3,10 +3,7 @@ import * as React from "react";
 import { ISong } from "../../types/SongsTypes";
 import AppList from "../AppList/AppList";
 import { ListOnScrollProps } from "react-window";
-import {
-  IExtendedListOnScrollProps,
-  LoadMoreItems,
-} from "../../types/AppListTypes";
+import { LoadMoreItems } from "../../types/AppListTypes";
 
 export default function SongsList({
   songs,

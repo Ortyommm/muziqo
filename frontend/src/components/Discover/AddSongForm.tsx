@@ -81,6 +81,7 @@ export default function AddSongForm({ onClose }: { onClose: () => void }) {
           params: {
             fetch_songs: false,
             name: name,
+            page: 0,
           },
         })
         .then((res: AxiosResponse<IAuthor[]>) => {

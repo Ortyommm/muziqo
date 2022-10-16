@@ -15,6 +15,7 @@ import Discover from "./components/Discover/Discover";
 import Home from "./components/Home/Home";
 import PlaylistSongsPage from "./components/Playlists/PlaylistSongsPage";
 import UsersPage from "./components/UsersList/UsersPage";
+import AuthorPage from "./components/Authors/AuthorPage";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -56,12 +57,20 @@ export default function App() {
               <PlaylistsPage />
             </ProtectedRoute>
           }
-        ></Route>
+        />
         <Route
           path="/users/:id"
           element={
             <ProtectedRoute>
               <UsersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/authors/:id"
+          element={
+            <ProtectedRoute>
+              <AuthorPage />
             </ProtectedRoute>
           }
         />
