@@ -1,4 +1,11 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  memo,
+  ReactElement,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import SongsList from "../SongsList/SongsList";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { api } from "../../utils/api";
@@ -69,7 +76,7 @@ const Discover = () => {
         break;
       }
       case "author":
-        setAuthors(data);
+        setAuthors([...authors, ...data]);
         break;
       case "users": {
         //TODO user pagination
@@ -121,7 +128,6 @@ const Discover = () => {
   }, [searchItem, currentPage]);
 
   function loadMoreItems(startIndex: number, stopIndex: number) {
-    // console.log("loadMoreItems");
     let items: ISong[] | IAuthor[];
     switch (searchItem) {
       case "songs":
@@ -132,23 +138,24 @@ const Discover = () => {
         items = authors;
         break;
     }
+
     if (isAllDataFetched) return;
 
     if (stopIndex > items.length * 0.8) {
       setCurrentPage(currentPage + 1);
-      // console.log(items, stopIndex);
     }
   }
 
   function onSearchItem(event: SelectChangeEvent) {
     const selectedSearchItem = event.target.value as SearchItems;
     setCurrentPage(0);
-    setIsAllDataFetched(getCurrentItems(selectedSearchItem).length < 50);
+    const currentItems = getCurrentItems(selectedSearchItem);
+    setIsAllDataFetched(currentItems.length < 50 && currentItems.length !== 0);
     setSearchText("");
     setSearchItem(selectedSearchItem);
   }
 
-  const CurrentList = () => {
+  const currentList = () => {
     switch (searchItem) {
       case "songs":
         return (
@@ -158,9 +165,12 @@ const Discover = () => {
             loadMoreItems={loadMoreItems}
           />
         );
+
       case "users":
         return <UsersList users={searchUsers} />;
+
       case "author":
+      default:
         return (
           <AuthorList
             authors={authors}
@@ -168,8 +178,6 @@ const Discover = () => {
             loadMoreItems={loadMoreItems}
           />
         );
-      default:
-        return <></>;
     }
   };
 
@@ -208,7 +216,7 @@ const Discover = () => {
             />
           </Grid>
         </Grid>
-        <CurrentList />
+        {currentList()}
       </Container>
       <AddSongOrAuthor />
     </>
