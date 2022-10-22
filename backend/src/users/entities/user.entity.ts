@@ -37,7 +37,6 @@ export class UserEntity {
   @JoinTable()
   roles: RoleEntity[];
 
-  //TODO сделать (проверить связи)
   @OneToMany(() => PlaylistEntity, (playlistEntity) => playlistEntity.user)
   @JoinTable()
   playlists: PlaylistEntity[];

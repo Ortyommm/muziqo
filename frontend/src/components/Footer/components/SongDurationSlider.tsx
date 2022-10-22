@@ -16,5 +16,11 @@ export default function SongDurationSlider() {
     dispatch(setCurrentTimeBySlider((duration / 100) * value));
   }
 
-  return <Slider value={currentTimePercent} onChange={onCurrentTimeChange} />;
+  return (
+    <Slider
+      value={currentTimePercent}
+      onChange={onCurrentTimeChange}
+      // sx={{ "& .MuiSlider-thumb": { width: "15px", height: "15px" } }}
+    />
+  );
 }
