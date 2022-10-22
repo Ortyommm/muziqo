@@ -31,7 +31,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start --host 0.0.0.0",
     "build": "react-scripts build",
     "build:lowram": "react-scripts --max_old_space_size=1024 build",
     "test": "react-scripts test",

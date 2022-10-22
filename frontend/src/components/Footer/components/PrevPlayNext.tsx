@@ -29,6 +29,8 @@ export default function PrevPlayNext() {
     dispatch(toggle());
   }
 
+  navigator.mediaSession?.setActionHandler("pause", onSongToggle);
+  navigator.mediaSession?.setActionHandler("play", onSongToggle);
   navigator.mediaSession?.setActionHandler("nexttrack", onNextClick);
   navigator.mediaSession?.setActionHandler("previoustrack", onPrevClick);
 
