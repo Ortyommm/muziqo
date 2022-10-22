@@ -29,11 +29,6 @@ export default function PrevPlayNext() {
     dispatch(toggle());
   }
 
-  navigator.mediaSession?.setActionHandler("pause", onSongToggle);
-  navigator.mediaSession?.setActionHandler("play", onSongToggle);
-  navigator.mediaSession?.setActionHandler("nexttrack", onNextClick);
-  navigator.mediaSession?.setActionHandler("previoustrack", onPrevClick);
-
   function onPrevClick() {
     changeSong(
       { ...getPrevSong(songs, currentSongId), changeSource: false },
@@ -61,8 +56,19 @@ export default function PrevPlayNext() {
       }
     }
 
+    navigator.mediaSession?.setActionHandler("pause", onSongToggle);
+    navigator.mediaSession?.setActionHandler("play", onSongToggle);
+    navigator.mediaSession?.setActionHandler("nexttrack", onNextClick);
+    navigator.mediaSession?.setActionHandler("previoustrack", onPrevClick);
+
     document.addEventListener("keyup", onKeyPress);
-    return () => document.removeEventListener("keyup", onKeyPress);
+    return () => {
+      document.removeEventListener("keyup", onKeyPress);
+      navigator.mediaSession?.setActionHandler("pause", null);
+      navigator.mediaSession?.setActionHandler("play", null);
+      navigator.mediaSession?.setActionHandler("nexttrack", null);
+      navigator.mediaSession?.setActionHandler("previoustrack", null);
+    };
   }, []);
 
   return (
