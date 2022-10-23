@@ -19,21 +19,20 @@ function getCurrentSongsByLocation() {
   return "temp";
 }
 
-function changeSong(
-  {
-    //audio file src
-    file,
-    id,
-    duration,
-    changeSource = true,
-  }: {
-    file: string;
-    id: number;
-    duration: string | number;
-    changeSource?: boolean;
-  },
-  dispatch: AppDispatch
-) {
+function changeSong({
+  //audio file src
+  file,
+  id,
+  duration,
+  changeSource = true,
+}: {
+  file: string;
+  id: number;
+  duration: string | number;
+  changeSource?: boolean;
+}) {
+  const dispatch = store.dispatch;
+
   dispatch(pause());
   const setSongData = () => {
     dispatch(setCurrentSongId(id));
@@ -49,6 +48,21 @@ function changeSong(
   } else {
     dispatch(fetchFileAndGetUrl(file)).then(setSongData);
   }
+
+  if (navigator.mediaSession) {
+    const currentSong = getAllSongs(store.getState().songs).find(
+      (song) => song.id === id
+    );
+    if (currentSong) {
+      //TODO many authors author
+      const author = currentSong.authors[0];
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentSong.name,
+        artist: author?.name || undefined,
+      });
+    }
+  }
 }
 
 function getNextSong(songs: ISong[], currentSongId: number | null) {
@@ -63,6 +77,27 @@ function getNextSong(songs: ISong[], currentSongId: number | null) {
   } else {
     return songs[currentSongIndex + 1];
   }
+}
+
+const currentSongId = () => store.getState().audio.currentSongId;
+
+function getSongsFromCurrentSource() {
+  const state = store.getState();
+  return state.songs[state.songs.currentSongsSource];
+}
+
+function changeSongToNext() {
+  changeSong({
+    ...getNextSong(getSongsFromCurrentSource(), currentSongId()),
+    changeSource: false,
+  });
+}
+
+function changeSongToPrev() {
+  changeSong({
+    ...getPrevSong(getSongsFromCurrentSource(), currentSongId()),
+    changeSource: false,
+  });
 }
 
 function getPrevSong(songs: ISong[], currentSongId: number | null) {
@@ -84,7 +119,7 @@ function getPrevSongInShuffled(shouldPlay: boolean) {
   const prevSong = state.songs.shuffled[state.songs.shuffled.length - 2];
   const currentSong = state.songs.shuffled[state.songs.shuffled.length - 1];
   if (prevSong) {
-    if (shouldPlay) changeSong(prevSong, store.dispatch);
+    if (shouldPlay) changeSong(prevSong);
     store.dispatch(
       setShuffledSongs([
         currentSong,
@@ -100,7 +135,7 @@ function getNextSongInShuffled(shouldPlay: boolean) {
   const state = store.getState();
   const song = state.songs.shuffled[0];
   if (song) {
-    if (shouldPlay) changeSong(song, store.dispatch);
+    if (shouldPlay) changeSong(song);
     store.dispatch(setShuffledSongs([...state.songs.shuffled.slice(1), song]));
     return song;
   }
@@ -126,6 +161,8 @@ export {
   playNextSongInShuffled,
   getAllSongsExceptFavorites,
   getAllSongs,
+  changeSongToNext,
+  changeSongToPrev,
 };
 // function prev(state) {
 //     const currentSongIndex = songs.findIndex(
