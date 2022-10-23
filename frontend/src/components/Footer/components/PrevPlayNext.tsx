@@ -5,9 +5,8 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import * as React from "react";
 import {
-  changeSong,
-  getNextSong,
-  getPrevSong,
+  changeSongToNext,
+  changeSongToPrev,
 } from "../../../store/modules/dispatchSong";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { toggle } from "../../../store/modules/audio";
@@ -16,31 +15,10 @@ import { useEffect } from "react";
 export default function PrevPlayNext() {
   const dispatch = useAppDispatch();
 
-  const currentSongsSource = useAppSelector(
-    (state) => state.songs.currentSongsSource
-  );
-
-  const songs = useAppSelector((state) => state.songs[currentSongsSource]);
-  const currentSongId = useAppSelector((state) => state.audio.currentSongId);
-
   const isPlaying = useAppSelector((state) => state.audio.isPlaying);
 
   function onSongToggle() {
     dispatch(toggle());
-  }
-
-  function onPrevClick() {
-    changeSong(
-      { ...getPrevSong(songs, currentSongId), changeSource: false },
-      dispatch
-    );
-  }
-
-  function onNextClick() {
-    changeSong(
-      { ...getNextSong(songs, currentSongId), changeSource: false },
-      dispatch
-    );
   }
 
   useEffect(() => {
@@ -56,30 +34,21 @@ export default function PrevPlayNext() {
       }
     }
 
-    navigator.mediaSession?.setActionHandler("pause", onSongToggle);
-    navigator.mediaSession?.setActionHandler("play", onSongToggle);
-    navigator.mediaSession?.setActionHandler("nexttrack", onNextClick);
-    navigator.mediaSession?.setActionHandler("previoustrack", onPrevClick);
-
     document.addEventListener("keyup", onKeyPress);
     return () => {
       document.removeEventListener("keyup", onKeyPress);
-      navigator.mediaSession?.setActionHandler("pause", null);
-      navigator.mediaSession?.setActionHandler("play", null);
-      navigator.mediaSession?.setActionHandler("nexttrack", null);
-      navigator.mediaSession?.setActionHandler("previoustrack", null);
     };
   }, []);
 
   return (
     <>
-      <IconButton onClick={onPrevClick} size="small">
+      <IconButton onClick={changeSongToPrev} size="small">
         <SkipPreviousIcon />
       </IconButton>
       <Button variant="outlined" onClick={onSongToggle} size="small">
         {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
       </Button>
-      <IconButton onClick={onNextClick} size="small">
+      <IconButton onClick={changeSongToNext} size="small">
         <SkipNextIcon />
       </IconButton>
     </>

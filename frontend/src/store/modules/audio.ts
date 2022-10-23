@@ -1,15 +1,10 @@
-import {
-  Action,
-  createAsyncThunk,
-  createSlice,
-  Dispatch,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch, RootState, store } from "../index";
 import { api } from "../../utils/api";
-import { ISong } from "../../types/SongsTypes";
 import {
   changeSong,
+  changeSongToNext,
+  changeSongToPrev,
   getNextSong,
   playNextSongInShuffled,
 } from "./dispatchSong";
@@ -42,7 +37,7 @@ audioController.onended = (event) => {
     state.songs[state.songs.currentSongsSource],
     state.audio.currentSongId
   );
-  changeSong(nextSong, store.dispatch);
+  changeSong(nextSong);
 };
 
 export interface IAudioState {
@@ -107,11 +102,6 @@ const audioSlice = createSlice({
       audioController.pause();
       state.isPlaying = false;
     },
-    play(state: IAudioState) {
-      if (!state.currentSongId) return;
-      audioController.play();
-      state.isPlaying = true;
-    },
     toggle(state) {
       if (!state.currentSongId) return;
       state.isPlaying ? audioController.pause() : audioController.play();
@@ -162,7 +152,7 @@ export const {
   setCurrentSongId,
   setAudioControllerSrc,
   pause,
-  play,
+  // play,
   toggle,
   setDuration,
   setCurrentTimeBySlider,
@@ -202,6 +192,25 @@ export const fetchFileAndGetUrl =
     }
 
     dispatch(setAudioControllerSrc(audioFileSrc));
+  };
+
+export const play =
+  () => async (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState().audio;
+    if (!state.currentSongId) return;
+
+    const dispatchToggle = () => dispatch(toggle());
+
+    audioController.play().then(() => {
+      navigator.mediaSession?.setActionHandler("pause", dispatchToggle);
+      navigator.mediaSession?.setActionHandler("play", dispatchToggle);
+      navigator.mediaSession?.setActionHandler("nexttrack", changeSongToNext);
+      navigator.mediaSession?.setActionHandler(
+        "previoustrack",
+        changeSongToPrev
+      );
+    });
+    dispatch(setIsPlaying(true));
   };
 
 export default audioSlice.reducer;

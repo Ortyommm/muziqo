@@ -43,7 +43,7 @@ export default function SongItem({
   // console.log(isFavorite);
   function onAudioClick() {
     if (id !== currentSongId) {
-      changeSong({ file, id, duration }, dispatch);
+      changeSong({ file, id, duration });
       return;
     }
 
