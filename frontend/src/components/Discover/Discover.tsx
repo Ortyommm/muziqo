@@ -1,11 +1,4 @@
-import React, {
-  ChangeEvent,
-  memo,
-  ReactElement,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import SongsList from "../SongsList/SongsList";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { api } from "../../utils/api";
@@ -64,6 +57,7 @@ const Discover = () => {
   };
 
   function setDataBySearchItem(data: ISong[] | IUser[]) {
+    console.log(currentPage);
     switch (searchItem) {
       case "songs": {
         dispatch(
@@ -76,7 +70,7 @@ const Discover = () => {
         break;
       }
       case "author":
-        setAuthors([...authors, ...data]);
+        setAuthors(currentPage ? [...authors, ...data] : data);
         break;
       case "users": {
         //TODO user pagination
@@ -86,6 +80,7 @@ const Discover = () => {
       }
     }
     if (data.length < 50) setIsAllDataFetched(true);
+    else setIsAllDataFetched(false);
   }
 
   function onSearch(
@@ -138,7 +133,6 @@ const Discover = () => {
         items = authors;
         break;
     }
-
     if (isAllDataFetched) return;
 
     if (stopIndex > items.length * 0.8) {
