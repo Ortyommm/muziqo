@@ -68,6 +68,7 @@ export class SongsService {
   findAll(name?: string, page?: number) {
     const songsLimit = 50;
 
+    //TODO code repetition
     const songs = this.songs.createQueryBuilder().select();
     if (name) songs.where(`name ILIKE :name`, { name: `%${name}%` });
 

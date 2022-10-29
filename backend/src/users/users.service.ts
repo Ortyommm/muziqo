@@ -33,8 +33,20 @@ export class UsersService {
     }
   }
 
-  async findAll(relations = ['roles']) {
-    return this.users.find({ relations });
+  async findAll(name?: string, page?: number) {
+    const usersLimit = 50;
+
+    //TODO code repetition
+    const users = this.users.createQueryBuilder().select();
+    if (name) users.where(`name ILIKE :name`, { name: `%${name}%` });
+
+    const items = users
+      .limit(usersLimit)
+      .offset(usersLimit * page)
+      .loadAllRelationIds({ relations: ['roles'] })
+      .getMany();
+
+    return items;
   }
 
   async findUserByEmail(email: string, relations = ['roles']) {

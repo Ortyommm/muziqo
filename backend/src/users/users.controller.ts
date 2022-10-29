@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -31,8 +32,8 @@ export class UsersController {
   // @UseGuards(RolesGuard)
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query('name') name?: string, @Query('page') page?: string) {
+    return this.usersService.findAll(name, +page);
   }
 
   @Get('/me')

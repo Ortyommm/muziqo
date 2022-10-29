@@ -57,7 +57,6 @@ const Discover = () => {
   };
 
   function setDataBySearchItem(data: ISong[] | IUser[]) {
-    console.log(currentPage);
     switch (searchItem) {
       case "songs": {
         dispatch(
@@ -75,6 +74,7 @@ const Discover = () => {
       case "users": {
         //TODO user pagination
         //TODO user search
+        console.log(data);
         dispatch(setSearchUsers(data as IUser[]));
         break;
       }
@@ -161,7 +161,7 @@ const Discover = () => {
         );
 
       case "users":
-        return <UsersList users={searchUsers} />;
+        return <UsersList users={searchUsers} isFetching={isLoading} />;
 
       case "author":
       default:
