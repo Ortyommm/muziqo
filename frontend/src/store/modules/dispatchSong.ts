@@ -5,7 +5,7 @@ import {
   setCurrentSongId,
   setDuration,
 } from "./audio";
-import { AppDispatch, store } from "../index";
+import { store } from "../index";
 import { ISong } from "../../types/SongsTypes";
 import { ISongsState, setCurrentSongsSource, setShuffledSongs } from "./songs";
 import { isSafari } from "../../utils/isSafari";
@@ -60,6 +60,7 @@ function changeSong({
       navigator.mediaSession.metadata = new MediaMetadata({
         title: currentSong.name,
         artist: author?.name || undefined,
+        artwork: currentSong.img ? [{ src: currentSong.img }] : undefined,
       });
     }
   }
