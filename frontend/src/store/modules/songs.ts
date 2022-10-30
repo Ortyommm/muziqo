@@ -123,7 +123,7 @@ export const addSongToDiscover =
   (data: FormData) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     api.post("songs/upload", data).then((res: AxiosResponse<ISong>) => {
-      dispatch(setTempSongs([...getState().songs.temp, res.data]));
+      dispatch(setTempSongs([res.data, ...getState().songs.temp]));
     });
   };
 
