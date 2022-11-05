@@ -1,38 +1,46 @@
 import CircleCenterProgress from "../Progress/CircularCenterProgress";
 import * as React from "react";
 import {
-  ElementType,
-  LegacyRef,
-  PropsWithChildren,
-  ReactElement,
-  useRef,
-} from "react";
-import {
   FixedSizeList,
   ListChildComponentProps,
   ListOnItemsRenderedProps,
-  ListOnScrollProps,
 } from "react-window";
 import styles from "./AppList.module.scss";
 import InfiniteLoader from "react-window-infinite-loader";
-import { LoadMoreItems } from "../../types/AppListTypes";
+import { IAppListProps } from "../../types/AppListTypes";
+import { Divider } from "@mui/material";
 
 export default function AppList({
   isFetching,
   items,
   Element,
   loadMoreItems,
-}: {
-  isFetching: boolean;
-  items: { id: number; [key: string]: any }[];
-  Element: ElementType;
-  loadMoreItems?: LoadMoreItems;
-}) {
+  height,
+}: IAppListProps) {
   if (isFetching) {
     return <CircleCenterProgress />;
   }
   if (!items.length) return <>No items</>;
 
+  return (
+    <>
+      <Divider />
+      <AppListWithItems
+        Element={Element}
+        loadMoreItems={loadMoreItems}
+        height={height}
+        items={items}
+      />
+    </>
+  );
+}
+
+function AppListWithItems({
+  items,
+  loadMoreItems,
+  height,
+  Element,
+}: Omit<IAppListProps, "isFetching">) {
   if (items.length < 10) {
     return (
       <>
@@ -57,7 +65,7 @@ export default function AppList({
   } = {}) => {
     return (
       <FixedSizeList
-        height={740}
+        height={height || 740}
         itemCount={items.length}
         //height: 70, padding bottom: 4
         itemSize={74}

@@ -40,7 +40,7 @@ export default function AuthorPage() {
         <FaceIcon fontSize="large" sx={{ mr: 2 }} />
         <Typography variant="h2">{authorData.name}</Typography>
       </Box>
-      <SongsList isFetching={isLoading} songs={authorData?.songs || []} />
+      <SongsList isFetching={isLoading} items={authorData?.songs || []} />
     </Container>
   );
 }

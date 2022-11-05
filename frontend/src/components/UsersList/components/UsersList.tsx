@@ -1,13 +1,8 @@
 import UserItem from "./UserItem";
 import { IUser } from "../../../types/UserTypes";
 import AppList from "../../AppList/AppList";
+import { ICertainListProps } from "../../../types/AppListTypes";
 
-export default function UsersList({
-  users,
-  isFetching = false,
-}: {
-  users: IUser[];
-  isFetching?: boolean;
-}) {
-  return <AppList isFetching={isFetching} items={users} Element={UserItem} />;
+export default function UsersList(props: ICertainListProps) {
+  return <AppList {...props} Element={UserItem} />;
 }

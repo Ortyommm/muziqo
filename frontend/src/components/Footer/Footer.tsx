@@ -1,13 +1,9 @@
-import { Box, Grid, Paper, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Paper, useMediaQuery, useTheme } from "@mui/material";
 import * as React from "react";
-import VolumeControl from "./VolumeControl";
-import PlayControls from "./PlayControls";
-import SongsData from "./SongsData";
-import PrevPlayNext from "./components/PrevPlayNext";
-import ShuffleAndRepeat from "./components/ShuffleAndRepeat";
 import { useLocation } from "react-router-dom";
 import DesktopFooter from "./components/DesktopFooter";
 import MobileFooter from "./components/MobileFooter";
+import useFooterHeight from "../../hooks/useFooterHeight";
 
 export default function Footer() {
   const location = useLocation();
@@ -15,6 +11,8 @@ export default function Footer() {
   const isDesktop = useMediaQuery(
     `(min-width: ${theme.breakpoints.values.sm}px)`
   );
+
+  const footerHeight = useFooterHeight();
 
   if (location.pathname === "/auth") return <></>;
   return (
@@ -24,7 +22,7 @@ export default function Footer() {
         bottom: 0,
         left: 0,
         right: 0,
-        height: { xs: 150, sm: 64 },
+        height: footerHeight,
         elevation: 3,
         display: "flex",
       }}

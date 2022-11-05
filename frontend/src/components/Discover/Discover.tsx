@@ -7,7 +7,6 @@ import { IAuthor, ISong } from "../../types/SongsTypes";
 import { setTempSongs } from "../../store/modules/songs";
 import {
   Container,
-  Fab,
   FormControl,
   Grid,
   InputAdornment,
@@ -18,13 +17,15 @@ import {
   TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
 import { setSearchUsers } from "../../store/modules/users";
 import { IUser } from "../../types/UserTypes";
 import UsersList from "../UsersList/components/UsersList";
 import AddSongOrAuthor from "./AddSongOrAuthor";
 import { isError } from "lodash-es";
 import AuthorList from "../Authors/components/AuthorList";
+import { headerWithMarginHeight } from "../../constants";
+import useFooterHeight from "../../hooks/useFooterHeight";
+import useCalculatedHeight from "../../hooks/useCalculatedHeight";
 
 const Discover = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +44,57 @@ const Discover = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const [authors, setAuthors] = useState<IAuthor[]>([]);
+
+  const footerHeight = useFooterHeight();
+  const searchHeight = 72;
+  const height = useCalculatedHeight(
+    window.innerHeight - headerWithMarginHeight - footerHeight - searchHeight
+  );
+
+  useEffect(() => {
+    if (!currentPage) setIsLoading(true);
+    api
+      .get(searchItem, { params: { page: currentPage } })
+      .then((res: AxiosResponse<ISong[] | IUser[]>) => {
+        if (isError(res)) throw res;
+        setDataBySearchItem(res.data);
+      })
+      .catch((err) => {
+        if (err.code === "ERR_NETWORK") {
+          console.log("err", err);
+        } /*setError()*/
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [searchItem, currentPage]);
+
+  function loadMoreItems(startIndex: number, stopIndex: number) {
+    let items: ISong[] | IAuthor[];
+    switch (searchItem) {
+      case "songs":
+        items = tempSongs;
+        break;
+      case "author":
+      default:
+        items = authors;
+        break;
+    }
+    if (isAllDataFetched) return;
+
+    if (stopIndex > items.length * 0.8) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  function onSearchItem(event: SelectChangeEvent) {
+    const selectedSearchItem = event.target.value as SearchItems;
+    setCurrentPage(0);
+    const currentItems = getCurrentItems(selectedSearchItem);
+    setIsAllDataFetched(currentItems.length < 50 && currentItems.length !== 0);
+    setSearchText("");
+    setSearchItem(selectedSearchItem);
+  }
 
   const getCurrentItems = (selectedSearchItem: string) => {
     switch (selectedSearchItem) {
@@ -104,72 +156,35 @@ const Discover = () => {
     );
   }
 
-  useEffect(() => {
-    if (!currentPage) setIsLoading(true);
-    api
-      .get(searchItem, { params: { page: currentPage } })
-      .then((res: AxiosResponse<ISong[] | IUser[]>) => {
-        if (isError(res)) throw res;
-        setDataBySearchItem(res.data);
-      })
-      .catch((err) => {
-        if (err.code === "ERR_NETWORK") {
-          console.log("err", err);
-        } /*setError()*/
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [searchItem, currentPage]);
-
-  function loadMoreItems(startIndex: number, stopIndex: number) {
-    let items: ISong[] | IAuthor[];
-    switch (searchItem) {
-      case "songs":
-        items = tempSongs;
-        break;
-      case "author":
-      default:
-        items = authors;
-        break;
-    }
-    if (isAllDataFetched) return;
-
-    if (stopIndex > items.length * 0.8) {
-      setCurrentPage(currentPage + 1);
-    }
-  }
-
-  function onSearchItem(event: SelectChangeEvent) {
-    const selectedSearchItem = event.target.value as SearchItems;
-    setCurrentPage(0);
-    const currentItems = getCurrentItems(selectedSearchItem);
-    setIsAllDataFetched(currentItems.length < 50 && currentItems.length !== 0);
-    setSearchText("");
-    setSearchItem(selectedSearchItem);
-  }
-
   const currentList = () => {
     switch (searchItem) {
       case "songs":
         return (
           <SongsList
-            songs={tempSongs}
+            items={tempSongs}
             isFetching={isLoading}
             loadMoreItems={loadMoreItems}
+            height={height}
           />
         );
 
       case "users":
-        return <UsersList users={searchUsers} isFetching={isLoading} />;
+        return (
+          <UsersList
+            items={searchUsers}
+            isFetching={isLoading}
+            height={height}
+          />
+        );
 
       case "author":
       default:
         return (
           <AuthorList
-            authors={authors}
+            items={authors}
             isFetching={isLoading}
             loadMoreItems={loadMoreItems}
+            height={height}
           />
         );
     }
@@ -177,7 +192,7 @@ const Discover = () => {
 
   return (
     <>
-      <Container>
+      <Container sx={{ mb: 0, mt: 2 }}>
         <Grid container>
           <Grid item xs={4} lg={2}>
             <FormControl sx={{ width: "80%" }}>

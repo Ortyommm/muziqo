@@ -51,7 +51,7 @@ export default function UsersPage() {
       <Typography variant="h4" mb={4}>
         Favorites
       </Typography>
-      <SongsList isFetching={isLoading} songs={userData.favorites || []} />
+      <SongsList isFetching={isLoading} items={userData.favorites || []} />
       <Typography variant="h4" mt={4} mb={4}>
         Playlists
       </Typography>

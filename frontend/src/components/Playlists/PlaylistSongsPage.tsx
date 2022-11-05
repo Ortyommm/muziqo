@@ -86,7 +86,7 @@ export default function PlaylistSongsPage() {
           playlistId={+params.id!}
         />
       </Box>
-      <SongsList songs={playlistSongs} isFetching={isLoading} />
+      <SongsList items={playlistSongs} isFetching={isLoading} />
     </Container>
   );
 }
