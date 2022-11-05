@@ -48,7 +48,8 @@ const Discover = () => {
   const footerHeight = useFooterHeight();
   const searchHeight = 72;
   const height = useCalculatedHeight(
-    window.innerHeight - headerWithMarginHeight - footerHeight - searchHeight
+    window.innerHeight - headerWithMarginHeight - footerHeight - searchHeight,
+    "discover"
   );
 
   useEffect(() => {

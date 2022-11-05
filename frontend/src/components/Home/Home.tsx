@@ -9,10 +9,10 @@ import useCalculatedHeight from "../../hooks/useCalculatedHeight";
 export default function Home() {
   const songs = useAppSelector((state) => state.songs.favorites);
   const isLoading = useAppSelector((state) => state.auth.isUserDataLoading);
-
   const footerHeight = useFooterHeight();
   const height = useCalculatedHeight(
-    window.innerHeight - headerWithMarginHeight - footerHeight
+    window.innerHeight - headerWithMarginHeight - footerHeight,
+    "home"
   );
 
   return (
