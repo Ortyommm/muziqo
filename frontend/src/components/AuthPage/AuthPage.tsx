@@ -9,6 +9,8 @@ import { setToken } from "../../store/modules/user";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IAuthPayload, IAuthResponseData } from "../../types/AuthTypes";
+import { isError } from "lodash-es";
+import { authErrorMessages, getAuthErrorMessage } from "./utils";
 
 export default function AuthPage() {
   const [isRegister, setIsRegister] = useState(true);
@@ -47,10 +49,7 @@ export default function AuthPage() {
       })
       .catch((err) => {
         const errorMessage = err?.response?.data?.message;
-        if (errorMessage === "email_already_exists") {
-          setEmailError("User with this email already exists");
-        }
-        //TODO login error incorrect
+        setEmailError(getAuthErrorMessage(errorMessage));
       });
   }
 
@@ -108,6 +107,7 @@ export default function AuthPage() {
           required
         />
         <TextField
+          error={emailError === authErrorMessages.incorrect_email_or_password}
           id="password"
           label="Password"
           variant="outlined"

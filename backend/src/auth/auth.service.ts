@@ -21,23 +21,24 @@ export class AuthService {
 
   async login(userDto: CreateUserDto) {
     const user = await this.validateUser(userDto);
+    if (!user) return;
     return this.generateToken(user);
   }
 
   private async validateUser(userDto: CreateUserDto) {
     const user = await this.userService.findUserByEmail(userDto.email);
-    //if !user
+    if (!user) throw new UnauthorizedException('incorrect_email_or_password');
     const passwordEquals = await scryptVerify(userDto.password, user.password);
     if (user && passwordEquals) {
       return user;
     }
-    throw new UnauthorizedException({ message: 'incorrect_email_or_password' });
+    throw new UnauthorizedException('incorrect_email_or_password');
   }
 
   async register(userDto: CreateUserDto) {
     const candidate = await this.userService.findUserByEmail(userDto.email);
     if (candidate) {
-      throw new HttpException('email_already_exists', HttpStatus.BAD_REQUEST);
+      throw new UnauthorizedException('email_already_exists');
     }
     const hashPassword = await scryptHash(userDto.password);
     const user = await this.userService.create({
