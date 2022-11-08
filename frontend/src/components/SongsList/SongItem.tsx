@@ -1,10 +1,8 @@
 import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import CachedIcon from "@mui/icons-material/Cached";
 import { durationConverter } from "../../utils/durationConverter";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { ISong } from "../../types/SongsTypes";
@@ -19,6 +17,7 @@ export default function SongItem({
   name,
   authors,
   id,
+  img,
   file,
   duration,
   moreItems,

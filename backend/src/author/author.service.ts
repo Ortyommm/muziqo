@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { AuthorEntity } from './entities/song.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -22,17 +27,10 @@ export class AuthorService {
 
     const shouldFetchRelations = fetchSongs === true || fetchSongs === 'true';
 
-    // if (!name)
-    //   return this.authors.find({
-    //     relations: shouldFetchRelations ? relations : undefined,
-    //   });
-
     const authors = this.authors.createQueryBuilder('author').select();
     if (name) authors.where(`name ILIKE :name`, { name: `%${name}%` });
 
     authors.limit(authorsLimit).offset(authorsLimit * page);
-
-    // console.log(authors);
 
     if (shouldFetchRelations) authors.loadAllRelationIds({ relations });
     return authors.getMany();

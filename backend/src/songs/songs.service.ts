@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   forwardRef,
   HttpException,
   HttpStatus,
@@ -60,6 +61,8 @@ export class SongsService {
           songId: song.id,
         });
         return song;
+      } else {
+        throw new BadRequestException('author_does_not_exist');
       }
     }
     return this.songs.save(song);

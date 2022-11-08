@@ -27,6 +27,7 @@ export class AuthService {
 
   private async validateUser(userDto: CreateUserDto) {
     const user = await this.userService.findUserByEmail(userDto.email);
+    //For email security
     if (!user) throw new UnauthorizedException('incorrect_email_or_password');
     const passwordEquals = await scryptVerify(userDto.password, user.password);
     if (user && passwordEquals) {
