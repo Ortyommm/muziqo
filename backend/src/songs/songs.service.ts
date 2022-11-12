@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteSongDto } from './dto/delete-song.dto';
 import { AuthorService } from '../author/author.service';
 import * as fs from 'fs';
-import { writeMulterFile } from './utils/writeFile';
+import { generateFilePath, writeMulterFile } from './utils/writeFile';
 import { songsDest } from './utils/multer-settings';
 import { parseBuffer } from 'music-metadata';
 
@@ -42,10 +42,11 @@ export class SongsService {
       oldPath ? '/' + oldPath.replace(/\\/g, '/') : null;
 
     const song = Object.assign(new SongEntity(), { name: dto.name });
-    const [songFilePath, imgFilePath] = await Promise.all([
-      writeMulterFile(songsDest, file),
-      img ? writeMulterFile(songsDest, img) : null,
-    ]);
+    const [songFilePath, imgFilePath] = [
+      generateFilePath(songsDest, file),
+      img ? generateFilePath(songsDest, img) : null,
+    ];
+
     song.file = toCommonPathFormat(songFilePath);
     song.img = toCommonPathFormat(imgFilePath);
     song.duration = songMeta.format.duration;
@@ -60,6 +61,10 @@ export class SongsService {
           authorId: author.id,
           songId: song.id,
         });
+        await Promise.all([
+          writeMulterFile(songFilePath, file),
+          img ? writeMulterFile(imgFilePath, img) : null,
+        ]);
         return song;
       } else {
         throw new BadRequestException('author_does_not_exist');

@@ -10,9 +10,11 @@ const generateFileName = (file: Express.Multer.File) => {
   return `${newFileName}.${extension}`;
 };
 
-export function writeMulterFile(dest: string, file: Express.Multer.File) {
-  const filePath = path.join(dest, generateFileName(file));
+export function generateFilePath(dest, file) {
+  return path.join(dest, generateFileName(file));
+}
 
+export function writeMulterFile(filePath: string, file: Express.Multer.File) {
   return util
     .promisify(fs.writeFile)(filePath, file.buffer)
     .then(() => filePath);
