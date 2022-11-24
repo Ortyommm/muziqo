@@ -1,6 +1,6 @@
-import SongsList from "../SongsList/SongsList";
+import SongsList from "../../components/SongsList/SongsList";
 import * as React from "react";
-import { useAppSelector } from "../../store";
+import { useAppSelector } from "@/store";
 import { Container } from "@mui/material";
 import useFooterHeight from "../../hooks/useFooterHeight";
 import { headerWithMarginHeight } from "../../constants";

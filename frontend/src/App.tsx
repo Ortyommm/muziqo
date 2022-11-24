@@ -2,20 +2,19 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { CssBaseline } from "@mui/material";
 import { Routes, Route, Navigate } from "react-router-dom";
-import AuthPage from "./components/AuthPage/AuthPage";
-import SongsList from "./components/SongsList/SongsList";
 import Footer from "./components/Footer/Footer";
 import AppHeader from "./components/AppHeader/AppHeader";
 import { getUserData } from "./store/modules/user";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./store";
 import ProtectedRoute from "./components/AppRouter/ProtectedRoute";
-import PlaylistsPage from "./components/Playlists/PlaylistsPage";
-import Discover from "./components/Discover/Discover";
-import Home from "./components/Home/Home";
-import PlaylistSongsPage from "./components/Playlists/PlaylistSongsPage";
-import UsersPage from "./components/UsersList/UsersPage";
-import AuthorPage from "./components/Authors/AuthorPage";
+import UserPage from "@/pages/User/UserPage";
+import AuthPage from "@/pages/AuthPage/AuthPage";
+import Discover from "@/pages/Discover/Discover";
+import Home from "@/pages/Home/Home";
+import PlaylistSongsPage from "@/pages/Playlists/PlaylistSongsPage";
+import AuthorPage from "@/pages/Author/AuthorPage";
+import PlaylistsPage from "@/pages/Playlists/PlaylistsPage";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -62,7 +61,7 @@ export default function App() {
           path="/users/:id"
           element={
             <ProtectedRoute>
-              <UsersPage />
+              <UserPage />
             </ProtectedRoute>
           }
         />

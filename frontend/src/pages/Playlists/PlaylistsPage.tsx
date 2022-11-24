@@ -1,9 +1,8 @@
 import React from "react";
-import PlaylistCard from "./components/PlaylistCard";
 import { Container, Grid } from "@mui/material";
-import { useAppSelector } from "../../store";
-import AppList from "../AppList/AppList";
+import { useAppSelector } from "@/store";
 import AddPlaylist from "./components/AddPlaylist";
+import PlaylistsList from "@/components/PlaylistsList/PlaylistsList";
 
 const PlaylistsPage = () => {
   const playlists = useAppSelector((state) => state.playlists.userPlaylists);
@@ -12,9 +11,9 @@ const PlaylistsPage = () => {
   return (
     <Container>
       <Grid container alignItems="stretch">
-        <AppList
-          Element={PlaylistCard}
+        <PlaylistsList
           isFetching={isLoading}
+          useCard={true}
           items={playlists}
         />
       </Grid>

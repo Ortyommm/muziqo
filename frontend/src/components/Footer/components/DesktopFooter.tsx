@@ -1,6 +1,6 @@
-import SongsData from "../SongsData";
-import PlayControls from "../PlayControls";
-import VolumeControl from "../VolumeControl";
+import SongsData from "./SongsData";
+import PlayControls from "./PlayControls";
+import VolumeControl from "./VolumeControl";
 import { Grid } from "@mui/material";
 import * as React from "react";
 

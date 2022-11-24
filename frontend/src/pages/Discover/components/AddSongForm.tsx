@@ -1,4 +1,4 @@
-import { useAppDispatch } from "../../store";
+import { useAppDispatch } from "../../../store";
 import React, {
   ChangeEvent,
   FormEvent,
@@ -6,10 +6,10 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { addSongToDiscover } from "../../store/modules/songs";
-import { api } from "../../utils/api";
+import { addSongToDiscover } from "../../../store/modules/songs";
+import { api } from "../../../utils/api";
 import { AxiosResponse } from "axios";
-import { IAuthor } from "../../types/SongsTypes";
+import { IAuthor } from "../../../types/SongsTypes";
 import {
   Autocomplete,
   Box,
@@ -18,8 +18,8 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { getFileNameFromInput, textFieldBind } from "../../utils/input";
-import SubmitButton from "./SubmitButton";
+import { getFileNameFromInput, textFieldBind } from "../../../utils/input";
+import SubmitButton from "../../../components/Buttons/SubmitButton";
 
 export default function AddSongForm({ onClose }: { onClose: () => void }) {
   const dispatch = useAppDispatch();

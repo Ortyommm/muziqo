@@ -3,15 +3,15 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { durationConverter } from "../../utils/durationConverter";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { ISong } from "../../types/SongsTypes";
-import AppListItem from "../AppList/AppListItem";
-import { changeSong } from "../../store/modules/dispatchSong";
-import { pause, play } from "../../store/modules/audio";
-import PlaylistsDialog from "../Playlists/PlaylistsDialog";
+import { durationConverter } from "@/utils/durationConverter";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { ISong } from "@/types/SongsTypes";
+import AppListItem from "@/components/AppList/AppListItem";
+import { changeSong } from "@/store/modules/dispatchSong";
+import { pause, play } from "@/store/modules/audio";
 import React, { ReactElement, useState } from "react";
-import FavoriteSongIcon from "../FavoriteSongIcon/FavoriteSongIcon";
+import FavoriteSongIcon from "@/components/FavoriteSongIcon/FavoriteSongIcon";
+import PlaylistsDialog from "@/components/SongsList/components/PlaylistsDialog";
 
 export default function SongItem({
   name,

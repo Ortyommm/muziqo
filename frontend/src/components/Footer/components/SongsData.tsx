@@ -1,10 +1,10 @@
 import { Grid } from "@mui/material";
 import * as React from "react";
-import { useAppSelector } from "../../store";
+import { useAppSelector } from "@/store";
 import {
   getAllSongs,
   getAllSongsExceptFavorites,
-} from "../../store/modules/dispatchSong";
+} from "@/store/modules/dispatchSong";
 
 export default function SongsData() {
   const songs = useAppSelector((state) => getAllSongs(state.songs));

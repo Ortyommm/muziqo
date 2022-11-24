@@ -1,8 +1,8 @@
 import { Grid, Slider } from "@mui/material";
 import { VolumeUp } from "@mui/icons-material";
 import * as React from "react";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { setVolume } from "../../store/modules/audio";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { setVolume } from "@/store/modules/audio";
 
 export default function VolumeControl() {
   const volume = useAppSelector((state) => state.audio.volume);

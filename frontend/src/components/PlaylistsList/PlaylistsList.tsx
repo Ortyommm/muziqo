@@ -1,7 +1,7 @@
-import PlaylistCard from "./PlaylistCard";
-import PlaylistItem from "./PlaylistItem";
-import AppList from "../../AppList/AppList";
-import { IPlaylist } from "../../../types/PlaylistsTypes";
+import PlaylistCard from "./components/PlaylistCard";
+import PlaylistItem from "./components/PlaylistItem";
+import { IPlaylist } from "@/types/PlaylistsTypes";
+import AppList from "@/components/AppList/AppList";
 
 export default function PlaylistsList({
   isFetching,

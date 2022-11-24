@@ -1,4 +1,3 @@
-import AddFab from "../../AddFab/AddFab";
 import React, { FormEvent, useState } from "react";
 import {
   Box,
@@ -7,14 +6,14 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { textFieldBind } from "../../../utils/input";
-import SubmitButton from "../../Discover/SubmitButton";
-import { addPlaylist } from "../../../store/modules/playlists";
-import { useAppDispatch } from "../../../store";
+import { textFieldBind } from "@/utils/input";
+import { addPlaylist } from "@/store/modules/playlists";
+import { useAppDispatch } from "@/store";
+import AddFab from "@/components/AddFab/AddFab";
+import SubmitButton from "@/components/Buttons/SubmitButton";
 
 export default function AddPlaylist() {
   const dispatch = useAppDispatch();
-
   const [open, setOpen] = useState(false);
 
   const [name, setName] = useState("");

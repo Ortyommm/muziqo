@@ -3,7 +3,7 @@ import FaceIcon from "@mui/icons-material/Face";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { IAuthor } from "../../../types/SongsTypes";
-import AppListItem from "../../AppList/AppListItem";
+import AppListItem from "../../../components/AppList/AppListItem";
 
 //May be will different from UserItem soon
 export default function AuthorItem({

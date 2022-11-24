@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import SongsList from "../SongsList/SongsList";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";
@@ -17,15 +16,16 @@ import {
   TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { setSearchUsers } from "../../store/modules/users";
-import { IUser } from "../../types/UserTypes";
-import UsersList from "../UsersList/components/UsersList";
-import AddSongOrAuthor from "./AddSongOrAuthor";
+import { setSearchUsers } from "@/store/modules/users";
+import { IUser } from "@/types/UserTypes";
+import AddSongOrAuthor from "./components/AddSongOrAuthor";
 import { isError } from "lodash-es";
-import AuthorList from "../Authors/components/AuthorList";
-import { headerWithMarginHeight } from "../../constants";
+import { headerWithMarginHeight } from "@/constants";
 import useFooterHeight from "../../hooks/useFooterHeight";
 import useCalculatedHeight from "../../hooks/useCalculatedHeight";
+import SongsList from "@/components/SongsList/SongsList";
+import UsersList from "@/components/UsersList/UsersList";
+import AuthorList from "@/components/Authors/AuthorList";
 
 const Discover = () => {
   const dispatch = useAppDispatch();

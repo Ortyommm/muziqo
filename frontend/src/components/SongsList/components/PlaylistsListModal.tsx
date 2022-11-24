@@ -1,6 +1,6 @@
-import { IPlaylist } from "../../../types/PlaylistsTypes";
-import { api } from "../../../utils/api";
-import PlaylistsList from "./../components/PlaylistsList";
+import { IPlaylist } from "@/types/PlaylistsTypes";
+import { api } from "@/utils/api";
+import PlaylistsList from "@/components/PlaylistsList/PlaylistsList";
 
 export default function PlaylistsListModal({
   isFetching,

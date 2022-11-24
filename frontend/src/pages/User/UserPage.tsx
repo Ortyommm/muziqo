@@ -1,18 +1,18 @@
 import { useParams } from "react-router-dom";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { api } from "../../utils/api";
-import { IUser } from "../../types/UserTypes";
+import { api } from "@/utils/api";
+import { IUser } from "@/types/UserTypes";
 import { AxiosResponse } from "axios";
-import SongsList from "../SongsList/SongsList";
-import CircleCenterProgress from "../Progress/CircularCenterProgress";
 import * as React from "react";
-import PlaylistsList from "../Playlists/components/PlaylistsList";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useAppDispatch } from "../../store";
-import { setTempSongs } from "../../store/modules/songs";
+import { useAppDispatch } from "@/store";
+import { setTempSongs } from "@/store/modules/songs";
+import SongsList from "@/components/SongsList/SongsList";
+import CircleCenterProgress from "@/components/Progress/CircularCenterProgress";
+import PlaylistsList from "@/components/PlaylistsList/PlaylistsList";
 
-export default function UsersPage() {
+export default function UserPage() {
   const params = useParams();
   const dispatch = useAppDispatch();
   const [userData, setUserData] = useState<IUser | null>(null);

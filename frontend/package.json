@@ -31,11 +31,11 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start --host 0.0.0.0",
-    "build": "react-scripts build",
-    "build:lowram": "react-scripts --max_old_space_size=1024 build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start --host 0.0.0.0",
+    "build": "craco build",
+    "build:lowram": "craco --max_old_space_size=1024 build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [
@@ -56,9 +56,11 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.0.0",
     "@types/react-window": "^1.8.5",
     "@types/react-window-infinite-loader": "^1.0.6",
     "@types/ua-parser-js": "^0.7.36",
+    "craco": "^0.0.3",
     "sass": "^1.54.9"
   }
 }

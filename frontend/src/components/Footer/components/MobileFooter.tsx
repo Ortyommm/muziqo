@@ -2,9 +2,9 @@ import { Box, Grid } from "@mui/material";
 import ShuffleAndRepeat from "./ShuffleAndRepeat";
 import PrevPlayNext from "./PrevPlayNext";
 import SongDurationSlider from "./SongDurationSlider";
-import SongsData from "../SongsData";
+import SongsData from "./SongsData";
 import FavoriteSongIcon from "../../FavoriteSongIcon/FavoriteSongIcon";
-import { useAppSelector } from "../../../store";
+import { useAppSelector } from "@/store";
 
 export default function MobileFooter() {
   const currentSongId = useAppSelector((state) => state.audio.currentSongId);

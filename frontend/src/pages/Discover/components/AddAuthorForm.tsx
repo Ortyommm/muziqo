@@ -1,8 +1,8 @@
 import { Box, DialogContent, DialogTitle, TextField } from "@mui/material";
 import React, { FormEvent, useState } from "react";
-import SubmitButton from "./SubmitButton";
-import { textFieldBind } from "../../utils/input";
-import { api } from "../../utils/api";
+import { textFieldBind } from "../../../utils/input";
+import { api } from "../../../utils/api";
+import SubmitButton from "../../../components/Buttons/SubmitButton";
 
 export default function AddAuthorForm({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState("");

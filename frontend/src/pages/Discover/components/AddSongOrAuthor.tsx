@@ -1,20 +1,8 @@
-import AddIcon from "@mui/icons-material/Add";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  Fab,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Button, Dialog, DialogContent, Grid } from "@mui/material";
 import React, { useState } from "react";
 import AddSongForm from "./AddSongForm";
 import AddAuthorForm from "./AddAuthorForm";
-import AddFab from "../AddFab/AddFab";
+import AddFab from "../../../components/AddFab/AddFab";
 
 export default function AddSongOrAuthor() {
   type AddItems = "author" | "song";

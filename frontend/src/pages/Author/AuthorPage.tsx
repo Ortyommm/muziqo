@@ -5,11 +5,11 @@ import { AxiosResponse } from "axios";
 import { setTempSongs } from "../../store/modules/songs";
 import { IAuthorWithSongs } from "../../types/SongsTypes";
 import { useAppDispatch } from "../../store";
-import SongsList from "../SongsList/SongsList";
 import * as React from "react";
 import { Box, Container, Typography } from "@mui/material";
 import FaceIcon from "@mui/icons-material/Face";
-import CircleCenterProgress from "../Progress/CircularCenterProgress";
+import CircleCenterProgress from "../../components/Progress/CircularCenterProgress";
+import SongsList from "../../components/SongsList/SongsList";
 
 export default function AuthorPage() {
   const params = useParams();

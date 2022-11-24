@@ -1,22 +1,15 @@
 import { useParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Container,
-  Dialog,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
-import { api } from "../../utils/api";
+import { api } from "@/utils/api";
 import { AxiosResponse } from "axios";
-import { IPlaylist } from "../../types/PlaylistsTypes";
-import SongsList from "../SongsList/SongsList";
-import { ISong } from "../../types/SongsTypes";
+import { IPlaylist } from "@/types/PlaylistsTypes";
+import { ISong } from "@/types/SongsTypes";
 import PlaylistRemoveItem from "./components/PlaylistRemoveItem";
-import { setTempSongs } from "../../store/modules/songs";
+import { setTempSongs } from "@/store/modules/songs";
 import { useAppDispatch, useAppSelector } from "../../store";
 import RemovePlaylistDialog from "./components/RemovePlaylistDialog";
+import SongsList from "@/components/SongsList/SongsList";
 
 export default function PlaylistSongsPage() {
   const params = useParams();

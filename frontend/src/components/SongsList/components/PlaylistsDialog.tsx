@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { useAppSelector } from "../../store";
-import PlaylistsListModal from "./components/PlaylistsListModal";
+import { useAppSelector } from "@/store";
+import PlaylistsListModal from "./PlaylistsListModal";
 
 export default function PlaylistsDialog({
   open,
