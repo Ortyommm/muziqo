@@ -1,18 +1,14 @@
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import AppBar from "@mui/material/AppBar";
 import * as React from "react";
 import { ReactNode } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import BoltIcon from "@mui/icons-material/Bolt";
-import { NavLink, useNavigate } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
-import { useAppSelector } from "../../store";
+import { NavLink } from "react-router-dom";
+import UserMenu from "@/components/AppHeader/components/UserMenu";
 class AppHeaderPage {
   constructor(public name: string, public icon: ReactNode, public to: string) {}
 }
@@ -25,13 +21,6 @@ const pages = [
 ];
 
 export default function AppHeader() {
-  const navigate = useNavigate();
-  const userId = useAppSelector((state) => state.auth.authorizedUser?.id);
-
-  function onAccountClick() {
-    navigate(`/users/${userId}`);
-  }
-
   return (
     <AppBar position="static">
       <Toolbar>
@@ -97,18 +86,7 @@ export default function AppHeader() {
             </Box>
           </Box>
 
-          <Box sx={{ ml: "auto" }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-              onClick={onAccountClick}
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
+          <UserMenu />
         </Box>
       </Toolbar>
     </AppBar>
