@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -18,6 +19,7 @@ import { AddRoleDto } from './dto/add-role.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { IAuthorizedUserRequest } from '../auth/types';
 import { AddOrDeleteFavoriteDto } from './dto/add-favorite';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -45,6 +47,12 @@ export class UsersController {
       'favorites.authors',
       'playlists',
     ]);
+  }
+
+  @Patch('/me')
+  @UseGuards(JwtAuthGuard)
+  update(@Req() req: IAuthorizedUserRequest, @Body() userDto: UpdateUserDto) {
+    return this.usersService.update(req, userDto);
   }
 
   @Get('/:id')

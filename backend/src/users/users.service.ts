@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +14,7 @@ import { DeleteUserDto } from './dto/delete-user.dto';
 import { IAuthorizedUserRequest } from '../auth/types';
 import { AddOrDeleteFavoriteDto } from './dto/add-favorite';
 import { SongsService } from '../songs/songs.service';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +24,11 @@ export class UsersService {
     private readonly rolesService: RolesService,
     private readonly songsService: SongsService,
   ) {}
+
+  private async saveUser(user: UserEntity) {
+    await this.users.save(user);
+    return { message: 'success' };
+  }
 
   async create(dto: CreateUserDto) {
     const user = Object.assign(new UserEntity(), dto);
@@ -111,8 +122,7 @@ export class UsersService {
     const user = await this.findUserById(req.user.id, ['favorites']);
     const song = await this.songsService.findById(true, dto.songId);
     user.favorites.push(song);
-    await this.users.save(user);
-    return { message: 'success' };
+    return this.saveUser(user);
   }
 
   async removeFavorite(
@@ -123,7 +133,15 @@ export class UsersService {
     user.favorites = user.favorites.filter(
       (favorite) => favorite.id !== dto.songId,
     );
-    await this.users.save(user);
-    return { message: 'success' };
+    return this.saveUser(user);
+  }
+
+  async update(req: IAuthorizedUserRequest, userDto: UpdateUserDto) {
+    const user = await this.findUserById(req.user.id);
+    if (!user) throw new BadRequestException('user_not_found');
+    if (userDto.name) {
+      user.name = userDto.name;
+    }
+    return this.saveUser(user);
   }
 }

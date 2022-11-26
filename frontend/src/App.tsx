@@ -15,6 +15,7 @@ import Home from "@/pages/Home/Home";
 import PlaylistSongsPage from "@/pages/Playlists/PlaylistSongsPage";
 import AuthorPage from "@/pages/Author/AuthorPage";
 import PlaylistsPage from "@/pages/Playlists/PlaylistsPage";
+import Settings from "@/pages/Settings/Settings";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -25,6 +26,37 @@ export default function App() {
     dispatch(getUserData());
   }, [token]);
 
+  const protectedRoutes = [
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "playlists",
+      element: <PlaylistsPage />,
+    },
+    {
+      path: "/users/:id",
+      element: <UserPage />,
+    },
+    {
+      path: "/authors/:id",
+      element: <AuthorPage />,
+    },
+    {
+      path: "/playlists/:id",
+      element: <PlaylistSongsPage />,
+    },
+    {
+      path: "/discover",
+      element: <Discover />,
+    },
+    {
+      path: "/settings",
+      element: <Settings />,
+    },
+  ];
+
   return (
     <div>
       <CssBaseline />
@@ -33,62 +65,13 @@ export default function App() {
       </Box>
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/playlists"
-          element={
-            <ProtectedRoute>
-              <PlaylistsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/playlists"
-          element={
-            <ProtectedRoute>
-              <PlaylistsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/users/:id"
-          element={
-            <ProtectedRoute>
-              <UserPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/authors/:id"
-          element={
-            <ProtectedRoute>
-              <AuthorPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/playlists/:id"
-          element={
-            <ProtectedRoute>
-              <PlaylistSongsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/discover"
-          element={
-            <ProtectedRoute>
-              <Discover />
-            </ProtectedRoute>
-          }
-        />
+        {protectedRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={<ProtectedRoute>{route.element}</ProtectedRoute>}
+          />
+        ))}
         <Route path="*" element={<Navigate to="" />} />
       </Routes>
       <Footer />
