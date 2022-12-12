@@ -5,7 +5,11 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { UserEntity } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import {
+  FindOptionsSelect,
+  FindOptionsSelectByString,
+  Repository,
+} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RolesService } from '../roles/roles.service';
@@ -15,6 +19,7 @@ import { IAuthorizedUserRequest } from '../auth/types';
 import { AddOrDeleteFavoriteDto } from './dto/add-favorite';
 import { SongsService } from '../songs/songs.service';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { scryptHash, scryptVerify } from 'src/auth/utils/cryptography';
 
 @Injectable()
 export class UsersService {
@@ -65,12 +70,12 @@ export class UsersService {
       .createQueryBuilder('user')
       .where({ email })
       .addSelect('user.password')
-      // .leftJoinAndSelect('user.favorites', 'favorites')
-      // .leftJoinAndSelect('user.playlists', 'playlists')
-      // .leftJoinAndSelect('user.roles', 'roles')
-      // .addSelect('favorites.file')
       .loadAllRelationIds({ relations })
       .getOne();
+    // .leftJoinAndSelect('user.favorites', 'favorites')
+    // .leftJoinAndSelect('user.playlists', 'playlists')
+    // .leftJoinAndSelect('user.roles', 'roles')
+    // .addSelect('favorites.file')
     // console.log({ user });
     /*.findOne({
       where: { email },
@@ -137,11 +142,32 @@ export class UsersService {
   }
 
   async update(req: IAuthorizedUserRequest, userDto: UpdateUserDto) {
-    const user = await this.findUserById(req.user.id);
+    const user = await this.findUserByEmail(req.user.email);
+    //Request error check
     if (!user) throw new BadRequestException('user_not_found');
+    if (userDto.password && !userDto.newPassword)
+      throw new BadRequestException('new_password_is_empty');
+    if (!userDto.password && userDto.newPassword)
+      throw new BadRequestException('old_password_is_empty');
+
+    if (userDto.password && userDto.newPassword) {
+      const passwordEquals = await scryptVerify(
+        userDto.password,
+        user.password,
+      );
+      if (!passwordEquals)
+        throw new BadRequestException('old_password_is_incorrect');
+    }
+
+    //Valid request
     if (userDto.name) {
       user.name = userDto.name;
     }
+
+    if (userDto.newPassword) {
+      user.password = await scryptHash(userDto.newPassword);
+    }
+
     return this.saveUser(user);
   }
 }

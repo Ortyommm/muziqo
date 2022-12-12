@@ -29,11 +29,6 @@ export default function UserMenu() {
     navigate("/settings");
   }
 
-  // function logout() {
-  //   localStorage.removeItem("token");
-  //   dispatch(setToken(null));
-  // }
-
   return (
     <Box sx={{ ml: "auto" }}>
       <IconButton
@@ -62,7 +57,6 @@ export default function UserMenu() {
       >
         <MenuItem onClick={navigateToProfile}>Profile</MenuItem>
         <MenuItem onClick={navigateToSettings}>Settings</MenuItem>
-        {/*<MenuItem onClick={logout}>Logout</MenuItem>*/}
       </Menu>
     </Box>
   );
