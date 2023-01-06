@@ -13,13 +13,15 @@ import { setShuffledSongs } from "./songs";
 import { isSafari } from "../../utils/isSafari";
 
 const initialVolume = +(localStorage.getItem("volume") || 1);
-const audioController = new Audio();
+export const audioController = new Audio();
 audioController.volume = initialVolume;
-audioController.ontimeupdate = (event) =>
+audioController.ontimeupdate = (event) => {
   store.dispatch(
-    setCurrentTime((event.target! as HTMLAudioElement).currentTime)
+      setCurrentTime((event.target! as HTMLAudioElement).currentTime)
   );
+}
 
+// store.dispatch(played)
 audioController.onended = (event) => {
   const state = store.getState();
   if (state.audio.repeat) {

@@ -4,6 +4,7 @@ import audioReducer from "./modules/audio";
 import songsReducer from "./modules/songs";
 import usersReducer from "./modules/users";
 import playlistsReducer from "./modules/playlists";
+import limitReducer from "./modules/limit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     songs: songsReducer,
     playlists: playlistsReducer,
     users: usersReducer,
+    limit: limitReducer
   },
 });
 

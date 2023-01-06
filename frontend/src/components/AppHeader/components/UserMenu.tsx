@@ -1,16 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/store";
+import {  useAppSelector } from "@/store";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { Menu, MenuItem } from "@mui/material";
-import { setToken } from "@/store/modules/user";
 
 export default function UserMenu() {
   const navigate = useNavigate();
   const userId = useAppSelector((state) => state.auth.authorizedUser?.id);
-  const dispatch = useAppDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

@@ -1,12 +1,13 @@
 import { Box, Button } from "@mui/material";
-import React from "react";
+import React, {ForwardedRef, forwardRef} from "react";
 
-export default function SubmitButton() {
+const SubmitButton = forwardRef((_, ref: ForwardedRef<null>) => {
   return (
     <Box sx={{ marginTop: 4 }}>
-      <Button type="submit" variant="outlined">
+      <Button type="submit" variant="outlined" ref={ref}>
         Submit
       </Button>
     </Box>
   );
-}
+})
+export default SubmitButton

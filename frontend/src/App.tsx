@@ -16,6 +16,7 @@ import PlaylistSongsPage from "@/pages/Playlists/PlaylistSongsPage";
 import AuthorPage from "@/pages/Author/AuthorPage";
 import PlaylistsPage from "@/pages/Playlists/PlaylistsPage";
 import Settings from "@/pages/Settings/Settings";
+import LimitReachDialog from "@/components/LimitReachDialog/LimitReachDialog";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -60,6 +61,7 @@ export default function App() {
   return (
     <div>
       <CssBaseline />
+      <LimitReachDialog />
       <Box sx={{ flexGrow: 1, mb: 2 }}>
         <AppHeader />
       </Box>
