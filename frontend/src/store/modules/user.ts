@@ -1,10 +1,12 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../../utils/api";
-import { RootState } from "../index";
+import { AppDispatch, RootState } from "../index";
 import { AxiosResponse } from "axios";
 import { IUser } from "../../types/UserTypes";
 import { setFavorites } from "./songs";
 import { setUserPlaylists } from "./playlists";
+import { IAuthPayload, IAuthResponseData } from "@/types/AuthTypes";
+import { getAuthErrorMessage } from "@/pages/AuthPage/utils";
 
 interface IUserState {
   token: string | null;

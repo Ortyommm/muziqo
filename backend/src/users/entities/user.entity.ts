@@ -33,6 +33,20 @@ export class UserEntity {
   })
   password: string;
 
+  @Column({
+    type: 'varchar',
+    select: false,
+    nullable: true
+  })
+  resetPassword: string;
+
+  @Column({
+    type: 'varchar',
+    select: false,
+    nullable: true
+  })
+  resetPasswordTimestamp: number;
+
   @ManyToMany(() => RoleEntity)
   @JoinTable()
   roles: RoleEntity[];

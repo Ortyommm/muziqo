@@ -70,6 +70,8 @@ export class UsersService {
       .createQueryBuilder('user')
       .where({ email })
       .addSelect('user.password')
+      .addSelect('user.resetPassword')
+      .addSelect('user.resetPasswordTimestamp')
       .loadAllRelationIds({ relations })
       .getOne();
     // .leftJoinAndSelect('user.favorites', 'favorites')

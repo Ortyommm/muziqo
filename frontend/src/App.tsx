@@ -17,6 +17,7 @@ import AuthorPage from "@/pages/Author/AuthorPage";
 import PlaylistsPage from "@/pages/Playlists/PlaylistsPage";
 import Settings from "@/pages/Settings/Settings";
 import LimitReachDialog from "@/components/LimitReachDialog/LimitReachDialog";
+import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -67,6 +68,7 @@ export default function App() {
       </Box>
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/auth/reset-password" element={<ResetPassword />} />
         {protectedRoutes.map((route) => (
           <Route
             key={route.path}

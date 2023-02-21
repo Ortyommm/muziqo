@@ -6,11 +6,11 @@ import { isEmail } from "../../utils/validators";
 import { api } from "../../utils/api";
 import { AxiosResponse } from "axios";
 import { setToken } from "../../store/modules/user";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IAuthPayload, IAuthResponseData } from "../../types/AuthTypes";
-import { isError } from "lodash-es";
 import { authErrorMessages, getAuthErrorMessage } from "./utils";
+import { useAppDispatch } from "@/store";
+import useRegisterOrLogin from "@/hooks/registerOrLogin";
 
 export default function AuthPage() {
   const [isRegister, setIsRegister] = useState(true);
@@ -23,8 +23,7 @@ export default function AuthPage() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [repeatPasswordError, setRepeatPasswordError] = useState("");
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const registerOrLogin = useRegisterOrLogin();
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -41,16 +40,11 @@ export default function AuthPage() {
     const data: IAuthPayload = { email, password };
     if (isRegister) data.name = name;
 
-    api
-      .post(`auth/${isRegister ? "register" : "login"}`, data)
-      .then((res: AxiosResponse<IAuthResponseData>) => {
-        dispatch(setToken(res.data.token));
-        navigate("/");
-      })
-      .catch((err) => {
-        const errorMessage = err?.response?.data?.message;
-        setEmailError(getAuthErrorMessage(errorMessage));
-      });
+    //Make action
+    registerOrLogin(isRegister, data).catch((err) => {
+      const errorMessage = err?.response?.data?.message;
+      setEmailError(getAuthErrorMessage(errorMessage));
+    });
   }
 
   return (
@@ -130,6 +124,11 @@ export default function AuthPage() {
         <Button sx={{ m: 1 }} variant="outlined" type="submit">
           {isRegister ? "Register" : "Login"}
         </Button>
+        {!isRegister && (
+          <Link to="/auth/reset-password" style={{ textDecoration: "none" }}>
+            <Button>Forgot password?</Button>
+          </Link>
+        )}
       </Box>
     </Container>
   );
