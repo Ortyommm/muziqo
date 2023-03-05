@@ -51,7 +51,6 @@ export class SongsService {
     song.img = toCommonPathFormat(imgFilePath);
     song.duration = songMeta.format.duration;
     song.authors = [];
-
     if (dto.authorId) {
       const author = await this.authorService.findById(false, dto.authorId);
       if (author) {
@@ -61,15 +60,14 @@ export class SongsService {
           authorId: author.id,
           songId: song.id,
         });
-        await Promise.all([
-          writeMulterFile(songFilePath, file),
-          img ? writeMulterFile(imgFilePath, img) : null,
-        ]);
-        return song;
       } else {
         throw new BadRequestException('author_does_not_exist');
       }
     }
+    await Promise.all([
+      writeMulterFile(songFilePath, file),
+      img ? writeMulterFile(imgFilePath, img) : null,
+    ]);
     return this.songs.save(song);
   }
 
